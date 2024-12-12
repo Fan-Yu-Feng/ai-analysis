@@ -1,0 +1,12 @@
+# 默认忽略的文件
+/shelf/
+/workspace.xml
+.DS_Store
+.idea/
+__pycache__
+.env
+.venv/
+pb/pb_data/
+pb/pocketbase
+/work_dir/
+/docker_dir/
