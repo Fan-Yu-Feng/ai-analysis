@@ -1,5 +1,7 @@
 import asyncio
+import json
 
+import pandas as pd
 from backend.core.llms.openai_wrapper import openai_llm as llm
 # from core.llms.siliconflow_wrapper import sfa_llm
 from loguru import logger
@@ -15,7 +17,8 @@ class GeneralAnalysisInfoExtractor:
     def __init__(self, _logger: logger) -> None:
         self.logger = _logger
         # self.model = os.environ.get("PRIMARY_MODEL","qwen2:7b")  # better to use "Qwen/Qwen2.5-14B-Instruct"
-        self.model = os.environ.get("PRIMARY_MODEL", "kimi")  # better to use "Qwen/Qwen2.5-14B-Instruct"
+        # self.model = os.environ.get("PRIMARY_MODEL", "moonshot-v1-8k")  # better to use "Qwen/Qwen2.5-14B-Instruct"
+        self.model = os.environ.get("PRIMARY_MODEL", "qwen2.5:14b")  # better to use "Qwen/Qwen2.5-14B-Instruct"
         self.secondary_model = os.environ.get("SECONDARY_MODEL", "THUDM/glm-4-9b-chat")
 
         self.get_info_prompt = f'''作为评论分析助手，我将会给你视频营销内容下方的评论数据，你的任务是从给定的多条评论文本中提取以下信息：
@@ -42,10 +45,12 @@ class GeneralAnalysisInfoExtractor:
 
         if not text:
             return []
-        content = f'<text>\n{text}\n</text>\n\n{self.get_info_suffix}'
+        content = f'评论内容：{text}\n\n{self.get_info_suffix}'
         message = [{'role': 'system', 'content': self.get_info_prompt}, {'role': 'user', 'content': content}]
         result = await llm(message,
-                           model=self.model, temperature=0.1, response_format={"type": "json_object"})
+                           model=self.model, temperature=0.1
+                           # , response_format={"type": "json_object"}
+                           )
         self.logger.debug(f'input : {message}\n get_info llm output:\n{result}')
         if not result:
             return []
@@ -90,67 +95,29 @@ class GeneralAnalysisInfoExtractor:
         return infos, related_urls, author, publish_date
 
 
-if __name__ == '__main__':
-    comment = """
-[{
-    "id": 112,
-    "content": "Yesss you’re doing this so right"
-  },
-  {
-    "id": 122,
-    "content": "😂😂😂💞💞"
-  },
-  {
-    "id": 345,
-    "content": "Write a book about family vlogging it would be a best seller"
-  },
-  {
-    "id": 423,
-    "content": "Stop. If this isn’t the cutest thing I’ve ever seen🥹🥹😍💕"
-  },
-  {
-    "id": 5,
-    "content": "this is so cuteeeee"
-  },
-  {
-    "id": 6,
-    "content": "Beautiful ❤️"
-  },
-  {
-    "id": 7,
-    "content": "❤️❤️❤️"
-  },
-  {
-    "id": 8,
-    "content": "This is so sweet😍"
-  },
-  {
-    "id": 9,
-    "content": "Beautiful ring given by beautiful person😍"
-  },
-  {
-    "id": 10,
-    "content": "I would of been upset lol"
-  },
-  {
-    "id": 11,
-    "content": "Congrats! 🍾"
-  },
-  {
-    "id": 12,
-    "content": "❤️🥹😭"
-  },
-  {
-    "id": 13,
-    "content": "it so bad"
-  },
-  {
-    "id": 16,
-    "content": "Every move he does is for $ his true colours are showing ..Everyone over looked his trips to Florida to party while the mother of his kids was home running the businesses & taking care of the kids ..He quit his job when his 1st was a new born ..couldn’t even do his YT channel ..Just spent. The $ his kids made…Idk any women who wouldn’t want to go find another partner who wants to be an adult work build a real future not just play all day ..Thank god ppl@are taking the rose colour glasses off to see why she fell in love with someone who wanted the same life she did."
-  }
-  ]
-"""
+def read_comments_from_excel(file_path: str) -> list[dict]:
+    try:
+        # Read the Excel file into a DataFrame
+        df = pd.read_excel(file_path)
 
+        # Convert DataFrame to a list of dictionaries
+        comments = []
+        for _, row in df.iterrows():
+            # 根据逗号分割
+            commentInfo = row[0].split('.')
+            comments.append({"id": commentInfo[0], "comment": commentInfo[1]})
+
+        return comments
+    except FileNotFoundError:
+        print(f"Error: The file '{file_path}' was not found.")
+    except ValueError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+
+if __name__ == '__main__':
+    comments = read_comments_from_excel('/Users/yohong/code/DR/ai-comment-analysis/backend/core/agents/comments.xlsx')
 
     async def main():
         project_dir = os.environ.get("PROJECT_DIR", "/Users/yohong/code/yohong/wiseflow")
@@ -159,11 +126,11 @@ if __name__ == '__main__':
         # comment_list = json.loads(comment)
 
         # 每 10 个 comment 拼接为 str 然后调用一次接口
-        # comments = '\n'.join([c['content'] for c in comment_list])
         results = []
-        res = await gie.get_anlalysis_res(comment)
+        res = await gie.get_anlalysis_res(comments)
         results.extend(res)
         print(res)
 
 
+    # 读取 comments.xlsx 文件，获取数据，文本分割，第一个为 id 第二个为 comment 生成 json 格式为 [{"id": 123, "comment": "comment"}]
     asyncio.run(main())

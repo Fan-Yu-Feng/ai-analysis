@@ -10,3 +10,5 @@ pb/pb_data/
 pb/pocketbase
 /work_dir/
 /docker_dir/
+node_modules/
+.vscode/

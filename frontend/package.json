@@ -11,8 +11,8 @@
     "test:e2e": "playwright test",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "lint": "eslint frontend --fix",
+    "format": "prettier --write src"
   },
   "dependencies": {
     "pinia": "^2.2.6",

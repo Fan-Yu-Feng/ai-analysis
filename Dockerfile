@@ -3,7 +3,7 @@ FROM python:3.10-slim
 RUN apt-get update && \
     apt-get install -y tzdata build-essential unzip
 
-COPY core/requirements.txt /tmp/requirements.txt
+COPY backend/core/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 RUN playwright install
 RUN playwright install-deps
