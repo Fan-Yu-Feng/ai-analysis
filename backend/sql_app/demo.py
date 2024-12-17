@@ -37,5 +37,14 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
+# 通过id查询用户
+@app.get("/comment/{id}", response_model=schemas.SocialMediaCommentList)
+def read_user(id: int, db: Session = Depends(get_db)):
+    db_user = crud.get_social_media_info(db, id=id)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="comment not found")
+    return db_user
+
+
 if __name__ == '__main__':
     uvicorn.run(app=app, host="127.0.0.1", port=8000)

@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class SocialMediaCommentList(BaseModel):
@@ -17,8 +18,8 @@ class SocialMediaCommentList(BaseModel):
 	create_time_: str
 	update_by_: int
 	update_time_: str
-	comment_json_extra_: str
-	reply_comment_total_: int
+	update_time_: Optional[str]  # Allow None and expect string
+	comment_json_extra_: Optional[str]  # Allow None and expect string
 
 
 class SocialMediaCommentListCreate(SocialMediaCommentList):
@@ -31,43 +32,35 @@ class SocialMediaCommentListCreate(SocialMediaCommentList):
 
 
 class SocialMediaCommentList(SocialMediaCommentList):
-	"""
-    响应模型：
-    id:
-    email:
-    is_active
-    并且设置orm_mode与之兼容
-    """
 	id_: int
 
 	class Config:
-		from_attributes = True
-
+		orm_mode = True
 
 
 class UserBase(BaseModel):
-    email: str
+	email: str
 
 
 class UserCreate(UserBase):
-    """
-    请求模型验证：
-    email:
-    password:
-    """
-    password: str
+	"""
+	请求模型验证：
+	email:
+	password:
+	"""
+	password: str
 
 
 class User(UserBase):
-    """
-    响应模型：
-    id:
-    email:
-    is_active
-    并且设置orm_mode与之兼容
-    """
-    id: int
-    is_active: bool
+	"""
+	响应模型：
+	id:
+	email:
+	is_active
+	并且设置orm_mode与之兼容
+	"""
+	id: int
+	is_active: bool
 
-    class Config:
-        orm_mode = True
+	class Config:
+		orm_mode = True
