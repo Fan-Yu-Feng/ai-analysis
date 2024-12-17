@@ -10,4 +10,3 @@ class CommentInfo(SQLModel, table=True):
     age: int | None = Field(default=None, index=True)
     secret_name: str
 
-# Code below omitted 👇
