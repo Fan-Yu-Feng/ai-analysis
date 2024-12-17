@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 from typing import Optional
 
@@ -35,7 +37,7 @@ class SocialMediaCommentList(SocialMediaCommentList):
 	id_: int
 
 	class Config:
-		orm_mode = True
+		from_attributes = True
 
 
 class UserBase(BaseModel):
@@ -57,10 +59,43 @@ class User(UserBase):
 	id:
 	email:
 	is_active
-	并且设置orm_mode与之兼容
+	并且设置from_attributes与之兼容
 	"""
 	id: int
 	is_active: bool
 
 	class Config:
-		orm_mode = True
+		from_attributes = True
+
+
+class SocialMediaContentInfoBase(BaseModel):
+	platform: Optional[str]
+	platform_account_id: Optional[str]
+	platform_nickname: Optional[str]
+	platform_media_id: Optional[str]
+	title: Optional[str]
+	content: Optional[str]
+	comments_count: Optional[int]
+	liked_count: Optional[int]
+	collected_count: Optional[int]
+	link: Optional[str]
+	pub_time: Optional[datetime]
+	pub_update_time: Optional[datetime]
+	is_del_: Optional[int] = 0
+	create_by_: int
+	create_time_: datetime
+	update_by_: Optional[int]
+	update_time_: Optional[datetime]
+	ext_info: Optional[str]
+
+
+	class Config:
+		from_attributes = True
+
+
+class SocialMediaContentInfoCreate(SocialMediaContentInfoBase):
+	pass
+
+
+class SocialMediaContentInfo(SocialMediaContentInfoBase):
+	id_: int
