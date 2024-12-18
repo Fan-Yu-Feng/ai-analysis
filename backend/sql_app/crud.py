@@ -92,3 +92,4 @@ def db_create_social_media_content_info(db: Session, content_info: schemas.Socia
 	db.commit()  # Commit to save to the database
 	db.refresh(db_content_info)  # Refresh
 	return db_content_info
+
