@@ -8,7 +8,7 @@ asynctest==0.13.0
 beautifulsoup4==4.12.3
 binaryornot==0.4.4
 blessed==1.20.0
-Bottleneck @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_55txi4fy1u/croot/bottleneck_1731058642212/work
+
 Brotli==1.1.0
 certifi==2024.8.30
 cffi==1.17.1
@@ -53,11 +53,8 @@ mdit-py-plugins==0.4.2
 mdurl==0.1.2
 more-itertools==10.5.0
 multidict==6.1.0
-numexpr @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_b3kvvt6tc6/croot/numexpr_1730215947700/work
-numpy @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_a51i_mbs7m/croot/numpy_and_numpy_base_1708638620867/work/dist/numpy-1.26.4-cp310-cp310-macosx_11_0_arm64.whl#sha256=c4b11b3c4d4fdb810039503fe01f311ade06cd1d675fcd6d208800a393f19b69
 openai==1.57.0
 openpyxl==3.1.5
-pandas @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_4aifrweohv/croot/pandas_1732735109535/work/dist/pandas-2.2.3-cp310-cp310-macosx_11_0_arm64.whl#sha256=6c5bbde94d3ac89a919939bdecfabca704888cdaf6251a6b101db7024fed27ab
 pillow==11.0.0
 playwright==1.49.1
 pocketbase==0.14.0
@@ -72,10 +69,8 @@ pyee==12.0.0
 Pygments==2.18.0
 PyMySQL==1.1.1
 pyperclip==1.9.0
-python-dateutil @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_66ud1l42_h/croot/python-dateutil_1716495741162/work
 python-dotenv==1.0.1
 python-slugify==8.0.4
-pytz @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_a4b76c83ik/croot/pytz_1713974318928/work
 PyYAML==6.0.2
 readchar==4.2.1
 requests==2.32.3
@@ -84,7 +79,6 @@ rich==13.9.4
 rookiepy==0.5.6
 runs==1.2.2
 shellingham==1.5.4
-six @ file:///tmp/build/80754af9/six_1644875935023/work
 sniffio==1.3.1
 socksio==1.0.0
 sortedcollections==2.1.0
@@ -102,7 +96,6 @@ typeguard==4.4.1
 typer==0.15.1
 types-python-dateutil==2.9.0.20241206
 typing_extensions==4.12.2
-tzdata @ file:///croot/python-tzdata_1690578112552/work
 uc-micro-py==1.0.3
 urllib3==2.2.3
 uvicorn==0.32.1
