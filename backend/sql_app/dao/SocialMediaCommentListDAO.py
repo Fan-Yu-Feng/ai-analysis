@@ -1,18 +1,23 @@
 from backend.sql_app.dao.BaseDAO import BaseDAO
-from backend.sql_app.dataobject.SocialMediaCommentListDo import SocialMediaCommentListDO
+from backend.sql_app.dataobject.SocialMediaCommentListDO import SocialMediaCommentListDO
 
 
 class SocialMediaCommentListDAO(BaseDAO):
-    _instance = None
-    """ 权限相关原子操作 """
-    def get_auths(self):
-        """ 获取所有auth """
-        return self.session.query(SocialMediaCommentListDO).all()
+	_instance = None
 
-    def add(self, do):
-        self.session.add(do)
-        self.session.flush()
+	def get_auths(self):
+		""" 获取所有auth """
+		return self.session.query(SocialMediaCommentListDO).all()
 
-    def get_by_comment_id(self, comment_id=None):
-        """ 根据code获取auth """
-        return self.session.query(SocialMediaCommentListDO).filter(SocialMediaCommentListDO.comment_id_ == comment_id).first()
+	def add(self, do):
+		self.session.add(do)
+		self.session.flush()
+
+	def get_by_comment_id(self, comment_id=None):
+		""" 根据code获取auth """
+		return self.session.query(SocialMediaCommentListDO).filter(
+			SocialMediaCommentListDO.comment_id_ == comment_id).first()
+
+	def get_paginated_comments(self, page: int, page_size: int):
+		offset = (page - 1) * page_size
+		return self.session.query(SocialMediaCommentListDO).limit(page_size).offset(offset).all()

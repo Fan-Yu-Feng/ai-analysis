@@ -3,7 +3,6 @@ import json
 
 import pandas as pd
 from backend.core.llms.openai_wrapper import openai_llm as llm
-# from core.llms.siliconflow_wrapper import sfa_llm
 from loguru import logger
 from backend.core.utils.pb_api import PbTalker
 import os
@@ -16,8 +15,6 @@ from backend.core.utils.general_utils import get_logger
 class GeneralAnalysisInfoExtractor:
     def __init__(self, _logger: logger) -> None:
         self.logger = _logger
-        # self.model = os.environ.get("PRIMARY_MODEL","qwen2:7b")  # better to use "Qwen/Qwen2.5-14B-Instruct"
-        # self.model = os.environ.get("PRIMARY_MODEL", "moonshot-v1-8k")  # better to use "Qwen/Qwen2.5-14B-Instruct"
         self.model = os.environ.get("PRIMARY_MODEL", "qwen2.5:14b")  # better to use "Qwen/Qwen2.5-14B-Instruct"
         self.secondary_model = os.environ.get("SECONDARY_MODEL", "THUDM/glm-4-9b-chat")
 
@@ -35,64 +32,79 @@ class GeneralAnalysisInfoExtractor:
 - 每条评论都带有 id，在返回总结时需要提供对应的 id，如果评论中不含 id，则不需要分析。
 - 请忽略评论文本中的不必要空格和换行符。'''
         self.get_info_suffix = '''如果评论文本中包含相关信息，请按以下JSON格式输出提取的信息：
-[{"id":"提供的 id","sentiment": "情感倾向", "topic": "主要主题", "keywords": ["关键词1", "关键词2", ...], "summary": "对产品的看法|对营销手段的评论|表达向往|表达讽刺|其他。","comment":"原始评论内容，不得修改"}]
+        {
+          "提供的 id": {
+            "sentiment": "情感倾向",
+            "topic": "主要主题",
+            "keywords": ["关键词1", "关键词2", ...],
+            "summary": "对产品的看法|对营销手段的评论|表达向往|表达讽刺|其他。",
+            "comment": "原始评论内容，不得修改"
+          }
+        }
 
-示例：
-[{"id":"1234","sentiment": "正面", "topic": "服务质量", "keywords": ["友好", "快速"], "summary": "表达向往", "comment": "服务速度快、质量好，工作人员很友好"}, {"id":"1235","sentiment": "负面", "topic": "产品质量", "keywords": ["破损"], "summary": "表达讽刺","comment":"产品质量太差，破损严重"}]
-如果评论文本中不包含任何相关信息，请输出：[]。'''
+        请注意，你的输出是 JSON 数据，格式示例：
+        {
+          "1822126918": {
+            "sentiment": "负面",
+            "topic": "价格问题",
+            "keywords": ["最便宜的多少米一枚"],
+            "summary": "表达讽刺",
+            "comment": "最便宜的多少米一枚[呲牙]"
+          }
+        }
+        如果评论文本中不包含任何相关信息，请输出：{}。'''
 
-    async def get_anlalysis_res(self, text: str) -> list[dict]:
-
+    async def get_anlalysis_res(self, text: str) -> dict:
         if not text:
-            return []
+            return {}
         content = f'评论内容：{text}\n\n{self.get_info_suffix}'
         message = [{'role': 'system', 'content': self.get_info_prompt}, {'role': 'user', 'content': content}]
-        result = await llm(message,
-                           model=self.model, temperature=0.1
-                           # , response_format={"type": "json_object"}
-                           )
+        result = await llm(message, model=self.model, temperature=0.1, response_format={"type": "json_object"})
         self.logger.debug(f'input : {message}\n get_info llm output:\n{result}')
         if not result:
-            return []
+            return {}
         # result = json_repair.repair_json(result, return_objects=True)
-        print("get analysis result" + result)
-        if not isinstance(result, list):
-            self.logger.warning("failed to parse from llm output")
-            return []
-        if not result:
+        try:
+            result_dict = json.loads(result)
+        except json.JSONDecodeError as e:
+            self.logger.warning(f"failed to parse from llm output: {e}")
+            return {}
+        if not isinstance(result_dict, dict):
+            self.logger.warning("parsed result is not a dictionary")
+            return {}
+        if not result_dict:
             self.logger.debug("no info found")
-            return []
-        # 业务数据清洗
-        return result
+            return {}
+            # 业务数据清洗
+        return result_dict
+        async def __call__(self, text: str, link_dict: dict, base_url: str, author: str = None, publish_date: str = None) -> \
+                tuple[list, set, str, str]:
+            if not author and not publish_date and text:
+                author, publish_date = await self.get_author_and_publish_date(text)
 
-    async def __call__(self, text: str, link_dict: dict, base_url: str, author: str = None, publish_date: str = None) -> \
-            tuple[list, set, str, str]:
-        if not author and not publish_date and text:
-            author, publish_date = await self.get_author_and_publish_date(text)
+            if not author or author.lower() == 'na':
+                author = urlparse(base_url).netloc
 
-        if not author or author.lower() == 'na':
-            author = urlparse(base_url).netloc
+            if not publish_date or publish_date.lower() == 'na':
+                publish_date = datetime.now().strftime('%Y-%m-%d')
 
-        if not publish_date or publish_date.lower() == 'na':
-            publish_date = datetime.now().strftime('%Y-%m-%d')
+            related_urls = await self.get_more_related_urls(link_dict, base_url)
 
-        related_urls = await self.get_more_related_urls(link_dict, base_url)
-
-        info_prefix = f"//{author} {publish_date}//"
-        lines = text.split('\n')
-        text = ''
-        infos = []
-        for line in lines:
-            text = f'{text}{line}'
-            if len(text) > 2048:
+            info_prefix = f"//{author} {publish_date}//"
+            lines = text.split('\n')
+            text = ''
+            infos = []
+            for line in lines:
+                text = f'{text}{line}'
+                if len(text) > 2048:
+                    cache = await self.get_info(text, info_prefix, link_dict)
+                    infos.extend(cache)
+                    text = ''
+            if text:
                 cache = await self.get_info(text, info_prefix, link_dict)
                 infos.extend(cache)
-                text = ''
-        if text:
-            cache = await self.get_info(text, info_prefix, link_dict)
-            infos.extend(cache)
 
-        return infos, related_urls, author, publish_date
+            return infos, related_urls, author, publish_date
 
 
 def read_comments_from_excel(file_path: str) -> list[dict]:
