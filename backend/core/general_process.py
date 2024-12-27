@@ -98,7 +98,7 @@ async def request_handler(context: PlaywrightCrawlingContext) -> None:
                     infos, related_urls = [], set()
     else:
         # Extract data from the page.
-        # future work: try to use a visual-llm do all the job...
+        # future work: try to use a visual-llm dataobject all the job...
         text = await context.page.inner_text('body')
         soup = BeautifulSoup(html, 'html.parser')
         links = soup.find_all('a', href=True)

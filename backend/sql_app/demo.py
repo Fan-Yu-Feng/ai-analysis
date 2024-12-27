@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
-import crud, schemas
-from database import SessionLocal, engine, Base
+import schemas
+from backend.sql_app.dao import crud
+from backend.sql_app.config.database import SessionLocal, engine, Base
 from sqlalchemy.orm import Session
 import uvicorn
 

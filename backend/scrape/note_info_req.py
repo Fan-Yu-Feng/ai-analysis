@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 import json
 from datetime import datetime
-from urllib.parse import urlencode
-from backend.sql_app.database import SessionLocal
-from backend.sql_app import crud
-from backend.sql_app.schemas import SocialMediaContentInfoCreate, SocialMediaContentInfo, SocialMediaContentInfoBase
-import os
+from backend.sql_app.dao import crud
+from backend.sql_app.schemas import SocialMediaContentInfoCreate
 
 import requests
 
 # -*- encoding:utf-8 -*-
-import sys  # reload()之前必须要引入模块
 
 headers = {
     'x-legacy-fid': '1646396027-0-0-739bdfc25899fff231a68a524b139bef',
@@ -80,7 +76,7 @@ import os
 project_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.append(project_path)
 
-from backend.sql_app.database import SessionLocal
+from backend.sql_app.config.database import SessionLocal
 
 
 def insert_db(res: dict):

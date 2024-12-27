@@ -73,7 +73,7 @@ When extracting information, please follow the principles below:
 - Stay true to the original text; your task is to identify and extract information related to each focus point from the web page text, not to summarize or refine it.
 
 Please note that the given web page text is extracted from HTML code via a crawler, so please ignore any unnecessary spaces, line breaks, etc.'''
-            self.get_info_suffix = '''If the above webpage text contains content related to points of interest, please output the extracted information in the following JSON format (the text may contain multiple useful pieces of information, do not miss any):
+            self.get_info_suffix = '''If the above webpage text contains content related to points of interest, please output the extracted information in the following JSON format (the text may contain multiple useful pieces of information, dataobject not miss any):
 [{"focus": "Point of Interest Name", "content": "Extracted Content"}]
 
 Example:

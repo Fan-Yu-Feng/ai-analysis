@@ -1,5 +1,5 @@
 from sqlalchemy import Boolean, Column, Integer, String, BigInteger, DateTime, Text, Index
-from backend.sql_app.database import Base
+from backend.sql_app.config.database import Base
 
 
 class User(Base):
@@ -11,6 +11,7 @@ class User(Base):
 
 
 class SocialMediaCommentList(Base):
+	# 评论数据表
 	__tablename__ = "social_media_comment_list"
 
 	id_ = Column(BigInteger, primary_key=True, autoincrement=True, comment='ID')
