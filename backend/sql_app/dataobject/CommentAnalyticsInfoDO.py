@@ -2,7 +2,8 @@ from sqlalchemy import Column, Integer, String, Text, JSON, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
-Base = declarative_base()
+from backend.sql_app.config.database import Base
+
 
 class CommentAnalyticsInfoDO(Base):
     __tablename__ = 'comment_analytics_info'

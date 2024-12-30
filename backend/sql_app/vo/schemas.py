@@ -99,3 +99,5 @@ class SocialMediaContentInfoCreate(SocialMediaContentInfoBase):
 
 class SocialMediaContentInfo(SocialMediaContentInfoBase):
 	id_: int
+
+

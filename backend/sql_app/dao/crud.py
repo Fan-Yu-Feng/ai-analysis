@@ -1,6 +1,6 @@
 # 通过id查询用户
 from sqlalchemy.orm import Session
-import backend.sql_app.dataobject.models as models, backend.sql_app.schemas as schemas
+import backend.sql_app.dataobject.models as models, backend.sql_app.vo.schemas as schemas
 
 
 def get_user(db: Session, user_id: int):

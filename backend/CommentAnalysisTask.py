@@ -1,9 +1,12 @@
 import asyncio
+import json
 import os
 
 from backend.core.agents.comment_analysis import GeneralAnalysisInfoExtractor
 from backend.core.utils.general_utils import get_logger
+from backend.sql_app.dao.CommentAnalyticsInfoDAO import CommentAnalyticsInfoDAO
 from backend.sql_app.dao.SocialMediaCommentListDAO import SocialMediaCommentListDAO
+from backend.sql_app.vo.CommentAnalyticsInfoVO import CommentAnalyticsInfoCreate
 
 
 class CommentAnalysisTask():
@@ -36,12 +39,28 @@ class CommentAnalysisTask():
 
 		# 每 10 个 comment 拼接为 str 然后调用一次接口
 
-		res = await gie.get_anlalysis_res(assembled_data)
-		# 调用接口获取评论分析结果
-		print(res)
+		data_dict = await gie.get_anlalysis_res(assembled_data)
 
+		# 调用接口获取评论分析结果
+		print(data_dict)
+		# 解析数据
+		comment_analytics_info_list = [
+			CommentAnalyticsInfoCreate(
+				comment_id=int(comment_id),
+				content=info['comment'],
+				sentiment=info['sentiment'],
+				topic=info.get('topic'),
+				keywords=info.get('keywords'),
+				summary=info['summary']
+			)
+			for comment_id, info in data_dict.items()
+		]
+		comment_analytics_info = CommentAnalyticsInfoDAO.getInstance()
+		comment_analytics_info.add_all(comment_analytics_info_list)
+		# 保存评论分析结果
 		return social_comment_list
 
+# Insert the data into the database
 if __name__ == '__main__':
 	comment = CommentAnalysisTask()
 	asyncio.run(comment.run())

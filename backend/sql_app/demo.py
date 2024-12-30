@@ -1,9 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException
-import schemas
+
 from backend.sql_app.dao import crud
 from backend.sql_app.config.database import SessionLocal, engine, Base
 from sqlalchemy.orm import Session
 import uvicorn
+
+from backend.sql_app.vo import schemas
 
 Base.metadata.create_all(bind=engine) #数据库初始化，如果没有库或者表，会自动创建
 
