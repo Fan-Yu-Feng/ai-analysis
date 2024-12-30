@@ -18,6 +18,6 @@ class SocialMediaCommentListDAO(BaseDAO):
 		return self.session.query(SocialMediaCommentListDO).filter(
 			SocialMediaCommentListDO.comment_id_ == comment_id).first()
 
-	def get_paginated_comments(self, page: int, page_size: int):
+	def get_paginated_comments(self, page: int, page_size: int, start_id: int = 0):
 		offset = (page - 1) * page_size
-		return self.session.query(SocialMediaCommentListDO).limit(page_size).offset(offset).all()
+		return self.session.query(SocialMediaCommentListDO).where(SocialMediaCommentListDO.id_ > start_id ).order_by("id_").limit(page_size).offset(offset).all()
