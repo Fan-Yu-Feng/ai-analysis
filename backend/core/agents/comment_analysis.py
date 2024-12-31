@@ -36,8 +36,8 @@ class GeneralAnalysisInfoExtractor:
           "提供的 id": {
             "sentiment": "情感倾向",
             "topic": "主要主题",
-            "keywords": ["关键词1", "关键词2", ...],
-            "summary": "对产品的看法|对营销手段的评论|表达向往|表达讽刺|其他。",
+            "keywords": ["关键词1", "关键词2", ...], // 不超过 3 个关键词列表
+            "summary": "对产品的看法|对营销手段的评论|表达向往|表达讽刺|其他。" // 枚举,
             "comment": "原始评论内容，不得修改"
           }
         }
