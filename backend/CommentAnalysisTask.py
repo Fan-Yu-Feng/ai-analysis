@@ -24,8 +24,8 @@ class CommentAnalysisTask():
 		# Run the comment analysis task
 		# 获取评论数据
 		socialCommentListDao = SocialMediaCommentListDAO.getInstance()
-		startId = 1822132488
-		social_comment_list = socialCommentListDao.get_paginated_comments(1, 10, startId)
+		startId = 1822240937
+		social_comment_list = socialCommentListDao.get_paginated_comments(1, 20, startId)
 		while len(social_comment_list) > 0:
 			startId = social_comment_list[-1].id_
 			# 组装数据。格式是[{id: comment.id_, content: comment.comment_content_}]
