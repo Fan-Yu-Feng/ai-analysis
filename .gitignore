@@ -12,3 +12,4 @@ pb/pocketbase
 /docker_dir/
 node_modules/
 .vscode/
+ragtest/logs/
