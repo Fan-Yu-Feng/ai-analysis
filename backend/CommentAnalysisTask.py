@@ -44,17 +44,20 @@ class CommentAnalysisTask():
 			# 调用接口获取评论分析结果
 			print(data_dict)
 			# 解析数据
-			comment_analytics_info_list = [
-				CommentAnalyticsInfoCreate(
-					comment_id=int(comment_id),
-					content=info['comment'],
-					sentiment=info['sentiment'],
-					topic=info.get('topic'),
-					keywords=info.get('keywords'),
-					summary=info['summary']
-				)
-				for comment_id, info in data_dict.items() if info
-			]
+			comment_analytics_info_list = []
+			for comment_id, info in data_dict.items():
+				try:
+					comment_analytics_info = CommentAnalyticsInfoCreate(
+						comment_id=int(comment_id),
+						content=info['comment'],
+						sentiment=info['sentiment'],
+						topic=info.get('topic'),
+						keywords=info['keywords'] if isinstance(info['keywords'], list) else [info['keywords']],
+						summary=info['summary']
+					)
+					comment_analytics_info_list.append(comment_analytics_info)
+				except Exception as e:
+					print(f"Error processing comment_id {comment_id}: {e}")
 			comment_analytics_info = CommentAnalyticsInfoDAO.getInstance()
 			comment_analytics_info.add_all(comment_analytics_info_list)
 
