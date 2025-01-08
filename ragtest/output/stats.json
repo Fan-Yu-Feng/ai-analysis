@@ -1,15 +1,15 @@
 {
-    "total_runtime": 2.085606098175049,
+    "total_runtime": 0.9833688735961914,
     "num_documents": 1,
     "input_load_time": 0,
     "workflows": {
         "create_base_text_units": {
-            "overall": 1.9530820846557617,
-            "0_create_base_text_units": 1.9515540599822998
+            "overall": 0.8443300724029541,
+            "0_create_base_text_units": 0.8431658744812012
         },
         "create_final_documents": {
-            "overall": 0.008283138275146484,
-            "0_create_final_documents": 0.0070648193359375
+            "overall": 0.015552997589111328,
+            "0_create_final_documents": 0.011109113693237305
         }
     }
 }

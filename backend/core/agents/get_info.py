@@ -20,7 +20,7 @@ class GeneralInfoExtractor:
         focus_data = pb.read(collection_name='focus_points', filter=f'activated=True')
         if not focus_data:
             self.logger.info('no activated tag found, will ask user to create one')
-            focus = input('It seems you have not set any focus point, WiseFlow need the specific focus point to guide the following info extract job.'
+            focus = input('It seems you have not set any focus point, WiseFlow need the specific focus point to guide the following info extractor job.'
                           'so please input one now. describe what info you care about shortly: ')
             explanation = input('Please provide more explanation for the focus point (if not necessary, pls just type enter: ')
             focus_data.append({"focuspoint": focus, "explanation": explanation,
@@ -63,14 +63,14 @@ url2
 ...
 """'''
         else:
-            self.get_info_prompt = f'''As an information extraction assistant, your task is to extract content related to the following user focus points from the given web page text. The list of focus points and their explanations is as follows:
+            self.get_info_prompt = f'''As an information extraction assistant, your task is to extractor content related to the following user focus points from the given web page text. The list of focus points and their explanations is as follows:
 
 {focus_statement}\n
 When extracting information, please follow the principles below:
 
 - Understand the meaning of each focus point and ensure that the extracted content is relevant to it.
 - If a focus point has further explanations, ensure that the extracted content conforms to the scope of these explanations.
-- Stay true to the original text; your task is to identify and extract information related to each focus point from the web page text, not to summarize or refine it.
+- Stay true to the original text; your task is to identify and extractor information related to each focus point from the web page text, not to summarize or refine it.
 
 Please note that the given web page text is extracted from HTML code via a crawler, so please ignore any unnecessary spaces, line breaks, etc.'''
             self.get_info_suffix = '''If the above webpage text contains content related to points of interest, please output the extracted information in the following JSON format (the text may contain multiple useful pieces of information, dataobject not miss any):
@@ -95,7 +95,7 @@ url2
         if len(text) > 1024:
             text = f'{text[:500]}......{text[-500:]}'
 
-        system_prompt = "As an information extraction assistant, your task is to accurately extract the source (or author) and publication date from the given webpage text. It is important to adhere to extracting the information directly from the original text. If the original text does not contain a particular piece of information, please replace it with NA"
+        system_prompt = "As an information extraction assistant, your task is to accurately extractor the source (or author) and publication date from the given webpage text. It is important to adhere to extracting the information directly from the original text. If the original text does not contain a particular piece of information, please replace it with NA"
         suffix = '''Please output the extracted information in the following JSON format:
 {"source": source or article author (use "NA" if this information cannot be extracted), "publish_date": extracted publication date (keep only the year, month, and day; use "NA" if this information cannot be extracted)}'''
 
