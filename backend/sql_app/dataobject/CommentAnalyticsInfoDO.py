@@ -3,9 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
 from backend.sql_app.config.database import Base
+from backend.sql_app.dataobject.BaseDO import BaseDO
 
 
-class CommentAnalyticsInfoDO(Base):
+class CommentAnalyticsInfoDO(BaseDO):
     __tablename__ = 'comment_analytics_info'
 
     id = Column(Integer, primary_key=True, nullable=False, comment='评论的唯一标识符')
@@ -15,5 +16,3 @@ class CommentAnalyticsInfoDO(Base):
     topic = Column(String(255), nullable=True, comment='主要主题')
     keywords = Column(JSON, nullable=True, comment='关键词')
     summary = Column(String(255), nullable=False, comment='总结分类：对产品的看法、对营销手段的评论、表达向往、表达讽刺、其他')
-    created_at = Column(TIMESTAMP, server_default=func.current_timestamp(), comment='创建时间')
-    updated_at = Column(TIMESTAMP, server_default=func.current_timestamp(), onupdate=func.current_timestamp(), comment='更新时间')

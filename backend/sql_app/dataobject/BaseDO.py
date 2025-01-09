@@ -2,7 +2,7 @@
 
 import time
 from uuid import uuid4
-from sqlalchemy import String, Integer
+from sqlalchemy import String, Integer, BigInteger
 from sqlalchemy import Column
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -33,8 +33,12 @@ class Base(object):
 
 class BaseObj(Base):
     # 公共字段
-    # id = Column(String, primary_key=True, default=lambda: str(uuid4()))
-    # create_time = Column(Integer, default=lambda: int(time.time()))
+    id = Column(BigInteger, primary_key=True, autoincrement=True, comment='ID')
+    create_time = Column(Integer, default=lambda: int(time.time()), nullable=False)
+    update_time = Column(Integer, default=lambda: int(time.time()), nullable=False, onupdate=lambda: int(time.time()))
+    deleted = Column(Integer, default=0)
+    create_by = Column(String(255), nullable=True, comment='创建者')
+    update_by = Column(String(255), nullable=True, comment='修改者')
     pass
 
 

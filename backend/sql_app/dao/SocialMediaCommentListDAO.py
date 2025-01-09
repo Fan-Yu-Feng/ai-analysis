@@ -4,6 +4,7 @@ from backend.sql_app.dataobject.SocialMediaCommentListDO import SocialMediaComme
 
 class SocialMediaCommentListDAO(BaseDAO):
 	_instance = None
+	_model = SocialMediaCommentListDO
 
 	def get_auths(self):
 		""" 获取所有auth """
@@ -18,6 +19,3 @@ class SocialMediaCommentListDAO(BaseDAO):
 		return self.session.query(SocialMediaCommentListDO).filter(
 			SocialMediaCommentListDO.comment_id_ == comment_id).first()
 
-	def get_paginated_comments(self, page: int, page_size: int, start_id: int = 0):
-		offset = (page - 1) * page_size
-		return self.session.query(SocialMediaCommentListDO).where(SocialMediaCommentListDO.id_ > start_id ).order_by("id_").limit(page_size).offset(offset).all()

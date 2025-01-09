@@ -12,3 +12,4 @@ pb/pocketbase
 node_modules/
 .vscode/
 ragtest/logs/
+*.log

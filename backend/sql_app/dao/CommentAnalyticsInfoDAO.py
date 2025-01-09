@@ -6,6 +6,9 @@ from backend.sql_app.vo.CommentAnalyticsInfoVO import CommentAnalyticsInfoCreate
 
 class CommentAnalyticsInfoDAO(BaseDAO):
 	_instance = None
+	_model = CommentAnalyticsInfoDO
+	def __init__(self):
+		super().__init__(CommentAnalyticsInfoDO)
 
 	def get_all(self):
 		""" 获取所有记录 """

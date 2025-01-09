@@ -3,18 +3,15 @@ import json
 
 import pandas as pd
 from backend.core.llms.openai_wrapper import openai_llm as llm
-from loguru import logger
-from backend.core.utils.pb_api import PbTalker
+
+from backend.common.log import logger
 import os
 from datetime import datetime
 from urllib.parse import urlparse
 
-from backend.core.utils.general_utils import get_logger
-
 
 class GeneralAnalysisInfoExtractor:
-    def __init__(self, _logger: logger) -> None:
-        self.logger = _logger
+    def __init__(self, ) -> None:
         self.model = os.environ.get("PRIMARY_MODEL", "qwen2.5:14b")  # better to use "Qwen/Qwen2.5-14B-Instruct"
         self.secondary_model = os.environ.get("SECONDARY_MODEL", "THUDM/glm-4-9b-chat")
 
@@ -60,20 +57,20 @@ class GeneralAnalysisInfoExtractor:
         content = f'评论内容：{text}\n\n{self.get_info_suffix}'
         message = [{'role': 'system', 'content': self.get_info_prompt}, {'role': 'user', 'content': content}]
         result = await llm(message, model=self.model, temperature=0.1, response_format={"type": "json_object"})
-        self.logger.debug(f'input : {message}\n get_info llm output:\n{result}')
+        logger.debug(f'input : {message}\n get_info llm output:\n{result}')
         if not result:
             return {}
         # result = json_repair.repair_json(result, return_objects=True)
         try:
             result_dict = json.loads(result)
         except json.JSONDecodeError as e:
-            self.logger.warning(f"failed to parse from llm output: {e}")
+            logger.warning(f"failed to parse from llm output: {e}")
             return {}
         if not isinstance(result_dict, dict):
-            self.logger.warning("parsed result is not a dictionary")
+            logger.warning("parsed result is not a dictionary")
             return {}
         if not result_dict:
-            self.logger.debug("no info found")
+            logger.debug("no info found")
             return {}
             # 业务数据清洗
         return result_dict
@@ -132,9 +129,7 @@ if __name__ == '__main__':
     comments = read_comments_from_excel('/Users/yohong/code/DR/ai-comment-analysis/backend/core/agents/comments.xlsx')
 
     async def main():
-        project_dir = os.environ.get("PROJECT_DIR", "/Users/yohong/code/yohong/wiseflow")
-        wiseflow_logger = get_logger('general_process', project_dir)
-        gie = GeneralAnalysisInfoExtractor(wiseflow_logger)
+        gie = GeneralAnalysisInfoExtractor()
         # comment_list = json.loads(comment)
 
         # 每 10 个 comment 拼接为 str 然后调用一次接口

@@ -3,12 +3,7 @@ from openai import OpenAI
 from openai import RateLimitError
 import asyncio
 from loguru import logger
-
-
-# base_url = os.environ.get('LLM_API_BASE', "http://192.168.14.39:3001/v1")
 base_url = os.environ.get('LLM_API_BASE', "http://192.168.15.8:3001/v1")
-# token = os.environ.get('LLM_API_KEY', "sk-uk21XurUgbLMbufC8c5135B3Db6d47019fBcC72943Be00Ca")  qw
-# token = os.environ.get('LLM_API_KEY', "sk-QTCb9Xe1TLuM5kcq62077817267143F98fC98e00Cb7a2914") # "kimi"
 token = os.environ.get('LLM_API_KEY', "sk-dmzReHcJzXoP9b6J6f042d36E9A14c72B8F4Ce1139DcC431") # "qwen2.5:14b"
 
 if not base_url and not token:
