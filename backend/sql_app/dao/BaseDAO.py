@@ -44,7 +44,10 @@ class BaseDAO():
 		self.session.flush()
 
 	def add_all(self, do_list: List[BaseDO]):
-
+		"""
+		添加新记录(批量)
+		:param do_list:
+		"""
 		self.session.add_all(do_list)
 		self.session.commit()  # 提交保存到数据库中
 		self.session.flush()
@@ -54,11 +57,34 @@ class BaseDAO():
 		validate_id(data.id)
 		query = self.session.query(self._model).filter(self._model.id == data.id)
 		# session.query(Users).filter(Users.id > 0).update({Users.name: Users.name + "099"}, synchronize_session=False)
-		query_obj = {}
+		update_obj = {}
 		for key, value in data.dict.items():
 			if value is not None:
-				query_obj[key] = value
-		return query.update(query_obj)
+				update_obj[key] = value
+		return query.update(update_obj)
+
+	def update_by_filters(self, update_do: BaseDO, **kwargs):
+		""" 更新记录 """
+		query = self.session.query(self._model)
+		for key, value in kwargs.items():
+			query = query.filter(getattr(self._model, key) == value)
+		update_obj = {}
+		for key, value in update_do.dict.items():
+			if value is not None:
+				update_obj[key] = value
+		return query.update(update_obj)
+
+	def update_by_filters_do(self, update_data: BaseDO, req_do: BaseDO):
+		""" 更新记录 """
+		query = self.session.query(self._model)
+		for key, value in req_do.dict.items():
+			if value is not None:
+				query = query.filter(getattr(self._model, key) == value)
+		update_obj = {}
+		for key, value in update_data.dict.items():
+			if value is not None:
+				update_obj[key] = value
+		return query.update(update_obj)
 
 	def delete_by_id(self, id: int):
 		""" 删除记录 将 deleted 更新为 1 """
