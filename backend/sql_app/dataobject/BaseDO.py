@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import time
-from uuid import uuid4
 from sqlalchemy import String, Integer, BigInteger
 from sqlalchemy import Column
 from sqlalchemy.ext.declarative import declarative_base

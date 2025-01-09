@@ -10,10 +10,6 @@ class CommentAnalyticsInfoDAO(BaseDAO):
 	def __init__(self):
 		super().__init__(CommentAnalyticsInfoDO)
 
-	def get_all(self):
-		""" 获取所有记录 """
-		return self.session.query(CommentAnalyticsInfoDO).all()
-
 	def add(self, do):
 		""" 添加新记录 """
 		self.session.add(do)

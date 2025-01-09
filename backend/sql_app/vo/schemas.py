@@ -5,23 +5,23 @@ from typing import Optional
 
 
 class SocialMediaCommentList(BaseModel):
-	platform_: str
-	platform_account_id_: str
-	platform_media_id_: str
-	comment_id_: str
-	comment_content_: str
-	comment_like_: int
-	comment_uid_: str
-	comment_sec_uid_: str
-	comment_user_nickname_: str
-	comment_time_: str
-	is_del_: int
-	create_by_: int
-	create_time_: str
-	update_by_: int
-	update_time_: str
-	update_time_: Optional[str]  # Allow None and expect string
-	comment_json_extra_: Optional[str]  # Allow None and expect string
+	platform: str
+	platform_account_id: str
+	platform_media_id: str
+	comment_id: str
+	comment_content: str
+	comment_like: int
+	comment_uid: str
+	comment_sec_uid: str
+	comment_user_nickname: str
+	comment_time: str
+	deleted: int
+	create_by: int
+	create_time: str
+	update_by: int
+	update_time: str
+	update_time: Optional[str]  # Allow None and expect string
+	comment_json_extra: Optional[str]  # Allow None and expect string
 
 
 class SocialMediaCommentListCreate(SocialMediaCommentList):
@@ -34,7 +34,7 @@ class SocialMediaCommentListCreate(SocialMediaCommentList):
 
 
 class SocialMediaCommentList(SocialMediaCommentList):
-	id_: int
+	id: int
 
 	class Config:
 		from_attributes = True
@@ -81,11 +81,11 @@ class SocialMediaContentInfoBase(BaseModel):
 	link: Optional[str]
 	pub_time: Optional[datetime]
 	pub_update_time: Optional[datetime]
-	is_del_: Optional[int] = 0
-	create_by_: int
-	create_time_: datetime
-	update_by_: Optional[int]
-	update_time_: Optional[datetime]
+	deleted: Optional[int] = 0
+	create_by: int
+	create_time: datetime
+	update_by: Optional[int]
+	update_time: Optional[datetime]
 	ext_info: Optional[str]
 
 
@@ -98,6 +98,6 @@ class SocialMediaContentInfoCreate(SocialMediaContentInfoBase):
 
 
 class SocialMediaContentInfo(SocialMediaContentInfoBase):
-	id_: int
+	id: int
 
 

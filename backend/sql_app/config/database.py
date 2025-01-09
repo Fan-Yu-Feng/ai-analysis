@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+# TODO mysql 配置从 config 中获取
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:oneapimmysql@192.168.15.8:3306/ai_comment"
 
 # echo=True表示引擎将用repr()函数记录所有语句及其参数列表到日志
