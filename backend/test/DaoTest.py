@@ -38,13 +38,15 @@ class MyTestCase(unittest.TestCase):
 
 	def test_dao_query_page_by_start_id(self):
 		dao = TaskConfigDAO.getInstance()
-		res = dao.get_page_by_start_id(1,10,1)
+		res = dao.get_page_by_start_id(1,10,0)
+
 		logger.info(res)
 		assert  res != None
 
 	def test_update_by_id(self):
 		dao = TaskConfigDAO.getInstance()
 		res = dao.update_by_id(TaskConfigDO(id=1, status='success'))
+
 		logger.info(res)
 		assert  res != None
 

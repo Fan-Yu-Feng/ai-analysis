@@ -42,23 +42,34 @@ class CommentAnalysisTask(BaseTask):
 		wait_task_list = self._get_wait_tasks()
 		for task in wait_task_list:
 			# 更新任务为处理中
-			count = self.update_task_status(task.id_, TaskStatusEnum.WAIT, TaskStatusEnum.PROCESSING)
+			count = self.update_task_status(task.id_, TaskStatusEnum.WAIT, TaskStatusEnum.PROGRESS)
 			if count == 0:
 				# 说明任务已经被其他线程处理了
 				continue
 			self.push_task(task.priority, task)
 		pass
 
-	def _process_task(self, task):
+	def _process_task(self, task: TaskConfigDO):
 		"""
 		process task
 		:param task: task object
 		"""
-		# Implement the actual task processing logic here
-		pass
+		# Implement the actual task PROGRESS logic here
+		try:
+			# 获取任务的 prompt
 
-	async def run(self):
+			self.run(task)
+			# 更新任务状态为已完成
+			self.update_task_status(task.id_, TaskStatusEnum.PROGRESS, TaskStatusEnum.FINISHED)
+		except Exception as e:
+			logger.error(f"Error PROGRESS task {task.id_}: {e}")
+			# 更新任务状态为失败
+			self.update_task_status(task.id_, TaskStatusEnum.PROGRESS, TaskStatusEnum.FAILED, str(e))
+
+	async def run(self, task: TaskConfigDO):
 		# Run the comment analysis task
+		prompt_do = self._prompt_config_dao.get_by_id(task.prompt_config_id)
+
 		# 获取评论数据
 		socialCommentListDao = SocialMediaCommentListDAO.getInstance()
 		startId = 1822240937
@@ -68,11 +79,9 @@ class CommentAnalysisTask(BaseTask):
 			# 组装数据。格式是[{id: comment.id_, content: comment.comment_content_}]
 			assembled_data = [{'id': comment.id_, 'content': comment.comment_content_} for comment in
 			                  social_comment_list]
-
 			logger.info(assembled_data)
 
 			gie = GeneralAnalysisInfoExtractor()
-			# comment_list = json.loads(comment)
 
 			# 每 10 个 comment 拼接为 str 然后调用一次接口
 			data_dict = await gie.get_anlalysis_res(assembled_data)
@@ -93,7 +102,7 @@ class CommentAnalysisTask(BaseTask):
 					)
 					comment_analytics_info_list.append(comment_analytics_info)
 				except Exception as e:
-					logger.info(f"Error processing comment_id {comment_id}: {e}")
+					logger.info(f"Error PROGRESS comment_id {comment_id}: {e}")
 			comment_analytics_info = CommentAnalyticsInfoDAO.getInstance()
 			comment_analytics_info.add_all(comment_analytics_info_list)
 

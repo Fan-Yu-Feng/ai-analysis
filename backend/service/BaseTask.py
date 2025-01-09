@@ -11,6 +11,7 @@ import queue
 from concurrent.futures import ThreadPoolExecutor
 from abc import ABC, abstractmethod
 
+from backend.sql_app.dao.PromptConfigDAO import PromptConfigDAO
 from backend.sql_app.dao.TaskConfigDAO import TaskConfigDAO
 from backend.sql_app.dataobject.TaskConfigDO import TaskConfigDO
 
@@ -25,6 +26,7 @@ class BaseTask(ABC):
     执行任务时定义一个线程池，从线程池中去取线程执行任务
     """
 	_task_config_dao = TaskConfigDAO.getInstance()
+	_prompt_config_dao = PromptConfigDAO.getInstance()
 
 	def __init__(self, max_workers=5):
 		"""
@@ -36,7 +38,7 @@ class BaseTask(ABC):
 		self.executor = ThreadPoolExecutor(max_workers=max_workers)
 		self.lock = threading.Lock()
 
-	def update_task_status(self, task_id, source_status, target_status):
+	def update_task_status(self, task_id, source_status, target_status, msg: str = None):
 		"""
 		更新任务状态  target_status -> source_status
 		:param target_status: 更新目标状态
@@ -44,6 +46,8 @@ class BaseTask(ABC):
 		:param task_id: 任务id
 		"""
 		update_do = TaskConfigDO(status=target_status)
+		if msg:
+			update_do.error_message = msg
 		return self._task_config_dao.update_by_filters(update_do, id=task_id, status=source_status)
 
 	@abstractmethod
