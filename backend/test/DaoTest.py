@@ -1,9 +1,9 @@
 import unittest
 
-from backend.sql_app.dao.TaskConfigDAO import TaskConfigDAO
-from backend.sql_app.dao.SocialMediaCommentListDAO import SocialMediaCommentListDAO
-from backend.common.log import logger
-from backend.sql_app.dataobject.TaskConfigDO import TaskConfigDO
+from backend.src.sql_app.dao import TaskConfigDAO
+from backend.src.sql_app.dao.SocialMediaCommentListDAO import SocialMediaCommentListDAO
+from backend.src.common.log import logger
+from backend.src.sql_app.dataobject import TaskConfigDO
 
 
 class MyTestCase(unittest.TestCase):

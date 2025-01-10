@@ -1,0 +1,20 @@
+LOG_LEVEL: DEBUG
+
+# ######################################################################################################
+# # https://docs.sqlalchemy.org/en/13/core/engines.html
+# mysql+pymysql://root:oneapimmysql@192.168.15.8:3306/ai_comment"
+DATABASE:
+  DRIVER: mysql
+  NAME: ai-comment
+  HOST: 192.168.15.8
+  PORT: 3306
+  USERNAME: root
+  PASSWORD: oneapimmysql
+  QUERY:
+    charset: utf8mb4
+
+LLM:
+    MODEL: qwen2.5:14b
+    OPEN_AI_API_KEY: sk-dmzReHcJzXoP9b6J6f042d36E9A14c72B8F4Ce1139DcC431
+    OPEN_AI_API_BASE: http://192.168.15.8:3001/v1
+
