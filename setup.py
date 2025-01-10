@@ -11,9 +11,9 @@
 import uvicorn
 from fastapi import FastAPI
 
-from backend import middlewares, routes
-from backend.src.config import settings
-from backend.src.common.log import init_log
+from ai_analytics import routes, middlewares
+from ai_analytics.config import settings
+from ai_analytics.common import init_log
 
 
 class Server:

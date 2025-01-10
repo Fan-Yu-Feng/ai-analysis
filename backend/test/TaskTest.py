@@ -10,10 +10,10 @@
 # test/TaskTest.py
 import unittest
 from unittest.mock import patch
-from backend.src.service.CommentAnalysisTask import CommentAnalysisTask
-from backend.src.service.TaskFactory import TaskFactory
-from backend.src.sql_app.dataobject import TaskConfigDO
-from backend.src.common.enums import TaskStatusEnum, TaskTypeEnum
+from ai_analytics.service.CommentAnalysisTask import CommentAnalysisTask
+from ai_analytics.service.TaskFactory import TaskFactory
+from ai_analytics.sql_app.dataobject import TaskConfigDO
+from ai_analytics.common.enums import TaskStatusEnum, TaskTypeEnum
 
 
 class TestCommentAnalysisTask(unittest.TestCase):
