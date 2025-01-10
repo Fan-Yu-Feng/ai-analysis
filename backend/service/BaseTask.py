@@ -117,7 +117,3 @@ class BaseTask(ABC):
 		"""
 		self.executor.shutdown()
 
-
-# Example usage
-process_task = BaseTask()
-process_task.start()

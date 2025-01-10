@@ -11,45 +11,11 @@ from urllib.parse import urlparse
 
 
 class GeneralAnalysisInfoExtractor:
-    def __init__(self, ) -> None:
+    def __init__(self, system_prompt: str, user_prompt: str ) -> None:
         self.model = os.environ.get("PRIMARY_MODEL", "qwen2.5:14b")  # better to use "Qwen/Qwen2.5-14B-Instruct"
         self.secondary_model = os.environ.get("SECONDARY_MODEL", "THUDM/glm-4-9b-chat")
-
-        self.get_info_prompt = f'''作为评论分析助手，我将会给你视频营销内容下方的评论数据，你的任务是从给定的多条评论文本中提取以下信息：
-1. 情感倾向，为枚举数据：只包含正面、负面、中性
-2. 主要主题
-3. 关键词
-4. 归纳总结，为枚举数据：对产品的看法，对营销手段的评论，表达向往，表达讽刺，其他。
-5. 原始评论内容：提供的原始评论数据，不得修改，直接使用对应的原文文本。
-
-请遵循以下原则进行信息提取：
-
-- 理解每个评论的内容，确保提取的信息准确。
-- 无论原文是什么语言，请使用中文输出提取结果。
-- 每条评论都带有 id，在返回总结时需要提供对应的 id，如果评论中不含 id，则不需要分析。
-- 请忽略评论文本中的不必要空格和换行符。'''
-        self.get_info_suffix = '''如果评论文本中包含相关信息，请按以下JSON格式输出提取的信息：
-        {
-          "提供的 id": {
-            "sentiment": "情感倾向",
-            "topic": "主要主题",
-            "keywords": ["关键词1", "关键词2", ...], // 不超过 3 个关键词列表
-            "summary": "对产品的看法|对营销手段的评论|表达向往|表达讽刺|其他。" // 枚举,
-            "comment": "原始评论内容，不得修改"
-          }
-        }
-
-        请注意，你的输出是 JSON 数据，格式示例：
-        {
-          "1822126918": {
-            "sentiment": "负面",
-            "topic": "价格问题",
-            "keywords": ["最便宜的多少米一枚"],
-            "summary": "表达讽刺",
-            "comment": "最便宜的多少米一枚[呲牙]"
-          }
-        }
-        如果评论文本中不包含任何相关信息，请输出：{}。'''
+        self.get_info_prompt = f'''{system_prompt}'''
+        self.get_info_suffix = f'''{user_prompt}'''
 
     async def get_anlalysis_res(self, text: str) -> dict:
         if not text:

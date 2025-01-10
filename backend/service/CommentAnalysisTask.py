@@ -23,7 +23,7 @@ class CommentAnalysisTask(BaseTask):
 	def __init__(self, max_workers=5):
 		super().__init__(max_workers)
 
-	def _get_wait_tasks(self):
+	def _get_wait_tasks(self) -> list[TaskConfigDO]:
 		"""
 		获取待处理任务
 		"""
@@ -42,7 +42,7 @@ class CommentAnalysisTask(BaseTask):
 		wait_task_list = self._get_wait_tasks()
 		for task in wait_task_list:
 			# 更新任务为处理中
-			count = self.update_task_status(task.id_, TaskStatusEnum.WAIT, TaskStatusEnum.PROGRESS)
+			count = self.update_task_status(task.id, TaskStatusEnum.WAIT, TaskStatusEnum.PROGRESS)
 			if count == 0:
 				# 说明任务已经被其他线程处理了
 				continue
@@ -56,32 +56,30 @@ class CommentAnalysisTask(BaseTask):
 		"""
 		# Implement the actual task PROGRESS logic here
 		try:
-			# 获取任务的 prompt
 
-			self.run(task)
+			asyncio.run(self.run(task))
 			# 更新任务状态为已完成
-			self.update_task_status(task.id_, TaskStatusEnum.PROGRESS, TaskStatusEnum.FINISHED)
+			self.update_task_status(task.id, TaskStatusEnum.PROGRESS, TaskStatusEnum.SUCCESS)
 		except Exception as e:
-			logger.error(f"Error PROGRESS task {task.id_}: {e}")
+			logger.error(f"Error PROGRESS task {task.id}: {e}")
 			# 更新任务状态为失败
-			self.update_task_status(task.id_, TaskStatusEnum.PROGRESS, TaskStatusEnum.FAILED, str(e))
+			self.update_task_status(task.id, TaskStatusEnum.PROGRESS, TaskStatusEnum.FAILED, str(e))
 
 	async def run(self, task: TaskConfigDO):
 		# Run the comment analysis task
+		# 获取任务的 prompt
 		prompt_do = self._prompt_config_dao.get_by_id(task.prompt_config_id)
-
 		# 获取评论数据
 		socialCommentListDao = SocialMediaCommentListDAO.getInstance()
 		startId = 1822240937
 		social_comment_list = socialCommentListDao.get_page_by_start_id(1, 20, startId)
+		gie = GeneralAnalysisInfoExtractor(prompt_do.system_prompt, prompt_do.user_prompt)
 		while len(social_comment_list) > 0:
-			startId = social_comment_list[-1].id_
-			# 组装数据。格式是[{id: comment.id_, content: comment.comment_content_}]
-			assembled_data = [{'id': comment.id_, 'content': comment.comment_content_} for comment in
+			startId = social_comment_list[-1].id
+			# 组装数据。格式是[{id: comment.id, content: comment.comment_content_}]
+			assembled_data = [{'id': comment.id, 'content': comment.comment_content} for comment in
 			                  social_comment_list]
 			logger.info(assembled_data)
-
-			gie = GeneralAnalysisInfoExtractor()
 
 			# 每 10 个 comment 拼接为 str 然后调用一次接口
 			data_dict = await gie.get_anlalysis_res(assembled_data)
@@ -111,5 +109,7 @@ class CommentAnalysisTask(BaseTask):
 
 # Insert the data into the database
 if __name__ == '__main__':
-	comment = CommentAnalysisTask()
-	asyncio.run(comment.run())
+	task = CommentAnalysisTask()
+	task.start_fetching()
+
+	asyncio.run(task.run())
