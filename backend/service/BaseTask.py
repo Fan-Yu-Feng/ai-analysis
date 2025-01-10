@@ -11,6 +11,7 @@ import queue
 from concurrent.futures import ThreadPoolExecutor
 from abc import ABC, abstractmethod
 
+from backend.common.enums import TaskTypeEnum
 from backend.sql_app.dao.PromptConfigDAO import PromptConfigDAO
 from backend.sql_app.dao.TaskConfigDAO import TaskConfigDAO
 from backend.sql_app.dataobject.TaskConfigDO import TaskConfigDO
@@ -57,6 +58,13 @@ class BaseTask(ABC):
 		"""
 		pass
 
+	@abstractmethod
+	def get_task_type(self) -> TaskTypeEnum:
+		"""
+		获取任务类型
+		"""
+		pass
+
 	def _fetch_tasks(self):
 		"""
         定时拉取任务，这个方法是私有的
@@ -75,13 +83,13 @@ class BaseTask(ABC):
 			if task not in self.processed_tasks:
 				self.task_queue.put((priority, task))
 
+	@abstractmethod
 	def _process_task(self, task):
 		"""
         process task
         :param task: task object
         """
 		# Implement the actual task processing logic here
-
 		pass
 
 	def _worker(self):

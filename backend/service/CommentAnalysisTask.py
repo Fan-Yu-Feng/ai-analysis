@@ -30,7 +30,10 @@ class CommentAnalysisTask(BaseTask):
 		# Fetch tasks from the source and add to the queue
 		# Example: self.task_queue.put((priority, task))
 		return self._task_config_dao.get_by_filters_do(
-			TaskConfigDO(status=TaskStatusEnum.WAIT, task_type=TaskTypeEnum.AnalysisComment))
+			TaskConfigDO(status=TaskStatusEnum.WAIT, task_type=self.get_task_type()))
+
+	def get_task_type(self) -> TaskTypeEnum:
+		return TaskTypeEnum.AnalysisComment
 
 	def _fetch_tasks(self):
 		"""

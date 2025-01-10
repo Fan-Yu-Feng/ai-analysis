@@ -11,6 +11,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from backend.service.CommentAnalysisTask import CommentAnalysisTask
+from backend.service.TaskFactory import TaskFactory
 from backend.sql_app.dataobject.TaskConfigDO import TaskConfigDO
 from backend.common.enums import TaskStatusEnum, TaskTypeEnum
 
@@ -48,7 +49,7 @@ class TestCommentAnalysisTask(unittest.TestCase):
 	# Mock the run method
 	def test_process_task(self):
 		# mock_run.return_value = None
-		task = CommentAnalysisTask()
+		task = TaskFactory.get_task(TaskTypeEnum.AnalysisComment)
 		task_config = TaskConfigDO(id=1, status=TaskStatusEnum.PROGRESS, task_type=TaskTypeEnum.AnalysisComment, prompt_config_id = 1)
 
 		task._process_task(task_config)
