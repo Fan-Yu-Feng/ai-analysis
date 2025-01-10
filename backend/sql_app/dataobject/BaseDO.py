@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import time
-from sqlalchemy import String, Integer, BigInteger
+from datetime import datetime
+
+from sqlalchemy import String, Integer, BigInteger, DateTime
 from sqlalchemy import Column
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -45,8 +47,8 @@ class Base(object):
 class BaseObj(Base):
 	# 公共字段
 	id = Column(BigInteger, primary_key=True, autoincrement=True, comment='ID')
-	create_time = Column(Integer, default=lambda: int(time.time()), nullable=False)
-	update_time = Column(Integer, default=lambda: int(time.time()), nullable=False, onupdate=lambda: int(time.time()))
+	create_time = Column(DateTime, default=datetime.utcnow, nullable=False)
+	update_time = Column(DateTime, default=datetime.utcnow, nullable=False, onupdate=datetime.utcnow)
 	deleted = Column(Integer, default=0, nullable=False, comment='是否删除，0未删除，1已删除')
 	create_by = Column(String(255), nullable=True, default='sys', comment='创建者')
 	update_by = Column(String(255), nullable=True, default='sys', comment='修改者')

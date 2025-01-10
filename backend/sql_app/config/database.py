@@ -14,7 +14,7 @@ engine = create_engine(
 # 每一个SessionLocal实例就是一个数据库session
 # flush指发送到数据库语句到数据库，但数据库不一定执行写入磁盘
 # commit是指提交事务，将变更保存到数据库文件中
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=engine)
 
 # 创建基本映射类
 Base = declarative_base()

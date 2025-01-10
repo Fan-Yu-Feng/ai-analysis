@@ -50,6 +50,15 @@ class MyTestCase(unittest.TestCase):
 		logger.info(res)
 		assert  res != None
 
+	def test_update_by_id(self):
+		dao = TaskConfigDAO.getInstance()
+		update_data = TaskConfigDO(id=1, status='success')
+		result = dao.update_by_id(update_data)
+		logger.info(result)
+		assert result > 0
+
+
+
 
 if __name__ == '__main__':
 

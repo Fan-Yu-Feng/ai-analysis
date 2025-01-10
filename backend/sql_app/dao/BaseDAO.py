@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import List
 
 from backend.sql_app.config.database import SessionLocal
@@ -12,10 +13,10 @@ def validate_id(id: int):
 T = TypeVar('T')
 
 
-class BaseDAO(Generic[T]):
+class BaseDAO(ABC, Generic[T]):
 	_instance = None
 	_session = None
-	_model = BaseDO
+	_model = T
 
 	@classmethod
 	def getInstance(cls) :
@@ -63,7 +64,9 @@ class BaseDAO(Generic[T]):
 		for key, value in data.dict.items():
 			if value is not None:
 				update_obj[key] = value
-		return query.update(update_obj)
+		cnt = query.update(update_obj)
+		self.session.commit()
+		return cnt
 
 	def update_by_filters(self, update_do: BaseDO, **kwargs) -> int:
 		""" 更新记录 """
@@ -74,7 +77,9 @@ class BaseDAO(Generic[T]):
 		for key, value in update_do.dict.items():
 			if value is not None:
 				update_obj[key] = value
-		return query.update(update_obj)
+		cnt = query.update(update_obj)
+		self.session.commit()
+		return cnt
 
 	def update_by_filters_do(self, update_data: BaseDO, req_do: BaseDO) -> int:
 		""" 更新记录 """
@@ -86,12 +91,29 @@ class BaseDAO(Generic[T]):
 		for key, value in update_data.dict.items():
 			if value is not None:
 				update_obj[key] = value
-		return query.update(update_obj)
+		cnt = query.update(update_obj)
+		self.session.commit()
+		return cnt
+
+	def delete_by_id_logic(self, id: int) -> int:
+		""" 删除记录 将 deleted 更新为 1 逻辑删除
+		"""
+		validate_id(id)
+		query = self._session.query(self._model).filter(self._model.id == id)
+		cnt = query.update({"deleted": 1})
+		self._session.commit()
+		return cnt
 
 	def delete_by_id(self, id: int) -> int:
-		""" 删除记录 将 deleted 更新为 1 """
+		""" 删除记录 物理删除
+		:param id:  id
+		:return:  删除的记录数
+		"""
 		validate_id(id)
-		return self._session.query(self._model).filter(self._model.id == id).update({"deleted": 1})
+		query = self.session.query(self._model).filter(self._model.id == id)
+		cnt = query.delete()
+		self.session.commit()
+		return cnt
 
 	def get_by_id(self, id: int) -> T:
 		"""
@@ -99,7 +121,6 @@ class BaseDAO(Generic[T]):
 		:param id:  id
 		:return:  BaseDO
 		"""
-
 		validate_id(id)
 		return self.session.query(self._model).filter(self._model.id == id).first()
 
