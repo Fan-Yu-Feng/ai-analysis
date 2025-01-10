@@ -1,6 +1,0 @@
-{
-  "model": "qwen2.5:7b",
-  "open_ai_api_key": "sk-dmzReHcJzXoP9b6J6f042d36E9A14c72B8F4Ce1139DcC431",
-  "open_ai_api_base": "http://192.168.15.8:3001/v1",
-  "proxy": ""
-}

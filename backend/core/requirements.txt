@@ -1,8 +1,0 @@
-openai
-loguru
-pocketbase
-pydantic
-json_repair==0.*
-beautifulsoup4
-requests
-crawlee[playwright]

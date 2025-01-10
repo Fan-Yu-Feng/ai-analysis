@@ -1,9 +1,13 @@
 from datetime import datetime
 
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, TypeVar
 
+from backend.sql_app.dataobject.BaseDO import BaseDO
 
+ModelType = TypeVar('ModelType', bound=BaseDO)
+CreateSchema = TypeVar('CreateSchema', bound=BaseModel)
+UpdateSchema = TypeVar('UpdateSchema', bound=BaseModel)
 class SocialMediaCommentList(BaseModel):
 	platform: str
 	platform_account_id: str
