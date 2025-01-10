@@ -40,4 +40,4 @@ class CustomBase:
     id = Column(BigInteger, primary_key=True, autoincrement=True)
 
 # 创建基本映射类
-Base = declarative_base()
+Base = declarative_base(cls=CustomBase)

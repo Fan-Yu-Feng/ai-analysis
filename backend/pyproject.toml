@@ -28,4 +28,4 @@ isort = "^5.13.2"
 flake8 = "^7.1.1"
 
 [tool.poetry.scripts]
-ai_analytics = "ai_analytics.cmdline:server"
+ai_analytics = "ai_analytics.cmdline:main"

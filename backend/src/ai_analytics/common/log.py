@@ -1,10 +1,10 @@
 import logging
 import sys
 from logging.config import dictConfig
-
+from pathlib import Path
 from ai_analytics.config import settings
 
-
+base_dir = Path(__file__).parent.parent
 def _reset_logger(log):
     for handler in log.handlers:
         handler.close()
@@ -19,7 +19,7 @@ def _reset_logger(log):
             datefmt="%Y-%m-%d %H:%M:%S",
         )
     )
-    file_handle = logging.FileHandler("run.log", encoding="utf-8")
+    file_handle = logging.FileHandler(f'{base_dir}/logs.log', encoding="utf-8")
     file_handle.setFormatter(
         logging.Formatter(
             "[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d] - %(message)s",
