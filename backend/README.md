@@ -2,7 +2,7 @@
 https://fastapi.tiangolo.com/zh/
 ## 项目初始化
 
-- 后端项目初始化参考：https://pyloong.github.io/pythonic-project-guidelines/practices/web/#2
+- 后端项目初始化参考：[项目初始化搭建](https://pyloong.github.io/pythonic-project-guidelines/practices/web/#2)
 ## 项目结构
 
 
