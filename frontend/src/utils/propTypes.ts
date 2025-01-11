@@ -23,7 +23,7 @@ const newPropTypes = createTypes({
 }) as PropTypes
 
 // 从 vue-types v5.0 开始，extend()方法已经废弃，当前已改为官方推荐的ES6+方法 https://dwightjack.github.io/vue-types/advanced/extending-vue-types.html#the-extend-method
-export default class propTypes extends newPropTypes {
+class propTypes extends newPropTypes {
   // a native-like validator that supports the `.validable` method
   static get style() {
     return toValidableType('style', {
@@ -37,3 +37,4 @@ export default class propTypes extends newPropTypes {
     })
   }
 }
+export { propTypes }

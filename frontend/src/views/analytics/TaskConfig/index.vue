@@ -1,6 +1,15 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { TaskConfigApi } from '@/api/taskConfig'
+
 defineOptions({
-  name: 'taskConfig',
+  name: 'TaskConfig',
+})
+onMounted(() => {
+  console.log('mounted')
+  TaskConfigApi.getTypeTaskList({}).then((res) => {
+    console.log(res)
+  })
 })
 </script>
 

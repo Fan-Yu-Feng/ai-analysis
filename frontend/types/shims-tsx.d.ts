@@ -1,8 +1,8 @@
-import Vue, { VNode } from "vue";
+import Vue, { VNode } from 'vue'
 
-declare module "*.tsx" {
-  import Vue from "compatible-vue";
-  export default Vue;
+declare module '*.tsx' {
+  import Vue from 'compatible-vue'
+  export default Vue
 }
 
 declare global {
@@ -10,13 +10,13 @@ declare global {
     interface Element extends VNode {}
     interface ElementClass extends Vue {}
     interface ElementAttributesProperty {
-      $props: any;
+      $props: any
     }
     interface IntrinsicElements {
-      [elem: string]: any;
+      [elem: string]: any
     }
     interface IntrinsicAttributes {
-      [elem: string]: any;
+      [elem: string]: any
     }
   }
 }
