@@ -1,5 +1,4 @@
-# Fastapi 
-https://fastapi.tiangolo.com/zh/
+# 后端文档
 ## 项目初始化
 
 - 后端项目初始化参考：[项目初始化搭建](https://pyloong.github.io/pythonic-project-guidelines/practices/web/#2)
