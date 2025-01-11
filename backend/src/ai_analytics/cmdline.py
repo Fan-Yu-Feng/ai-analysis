@@ -54,15 +54,9 @@ def server(host, port, level):
 @click.argument('args', nargs=-1)
 def migrate(ctx: Context, help, args):
 	"""usage migrate -- arguments"""
-	migration_path = Path(__file__).parent
-	click.echo(f"Path doesn't exist: '{migration_path}'. Initializing migration directory.")
-	# Check if the migration directory exists
-	# if not migration_path.exists():
-	# 	click.echo(f"Path doesn't exist: '{migration_path}'. Initializing migration directory.")
-	# 	os.makedirs(migration_path)
-	# 	with utils.chdir(migration_path):
-	# 		config.main(prog=ctx.command_path, argv=['init'])
-
+	migration_path = Path(__file__).parent / 'migration'
+	click.echo(f"Path : '{migration_path}'.")
+	"""usage migrate -- arguments    """
 	with utils.chdir(migration_path):
 		argv = list(args)
 		if help:
