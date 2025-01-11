@@ -7,10 +7,16 @@
 
 ## 项目启动
 
+环境安装
+```shell
+cd backend
+poetry install
+```
+
 安装环境后执行以下命令既可：
 ```shell
 pip install -e .
-ai_analytics
+ai_analytics server
 ```
 出现以下提示既可, 打开网站：http://127.0.0.1:8000/docs
 ```text
