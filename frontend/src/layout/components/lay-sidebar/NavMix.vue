@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { isAllEmpty } from "@pureadmin/utils";
-import { useNav } from "@/layout/hooks/useNav";
-import LaySearch from "../lay-search/index.vue";
-import LayNotice from "../lay-notice/index.vue";
-import { ref, toRaw, watch, onMounted, nextTick } from "vue";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { getParentPaths, findRouteByPath } from "@/router/utils";
-import { usePermissionStoreHook } from "@/store/modules/permission";
-import LaySidebarExtraIcon from "./components/SidebarExtraIcon.vue";
-import LaySidebarFullScreen from "./components/SidebarFullScreen.vue";
+import { isAllEmpty } from '@pureadmin/utils'
+import { useNav } from '@/layout/hooks/useNav'
+import LaySearch from '../lay-search/index.vue'
+import LayNotice from '../lay-notice/index.vue'
+import { ref, toRaw, watch, onMounted, nextTick } from 'vue'
+import { useRenderIcon } from '@/components/ReIcon/src/hooks'
+import { getParentPaths, findRouteByPath } from '@/router/utils'
+import { usePermissionStoreHook } from '@/store/modules/permission'
+import LaySidebarExtraIcon from './components/SidebarExtraIcon.vue'
+import LaySidebarFullScreen from './components/SidebarFullScreen.vue'
 
-import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import Setting from "@iconify-icons/ri/settings-3-line";
+import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line'
+import Setting from '@iconify-icons/ri/settings-3-line'
 
-const menuRef = ref();
-const defaultActive = ref(null);
+const menuRef = ref()
+const defaultActive = ref(null)
 
 const {
   route,
@@ -25,32 +25,32 @@ const {
   username,
   userAvatar,
   getDivStyle,
-  avatarsStyle
-} = useNav();
+  avatarsStyle,
+} = useNav()
 
 function getDefaultActive(routePath) {
-  const wholeMenus = usePermissionStoreHook().wholeMenus;
+  const wholeMenus = usePermissionStoreHook().wholeMenus
   /** 当前路由的父级路径 */
-  const parentRoutes = getParentPaths(routePath, wholeMenus)[0];
+  const parentRoutes = getParentPaths(routePath, wholeMenus)[0]
   defaultActive.value = !isAllEmpty(route.meta?.activePath)
     ? route.meta.activePath
-    : findRouteByPath(parentRoutes, wholeMenus)?.children[0]?.path;
+    : findRouteByPath(parentRoutes, wholeMenus)?.children[0]?.path
 }
 
 onMounted(() => {
-  getDefaultActive(route.path);
-});
+  getDefaultActive(route.path)
+})
 
 nextTick(() => {
-  menuRef.value?.handleResize();
-});
+  menuRef.value?.handleResize()
+})
 
 watch(
   () => [route.path, usePermissionStoreHook().wholeMenus],
   () => {
-    getDefaultActive(route.path);
-  }
-);
+    getDefaultActive(route.path)
+  },
+)
 </script>
 
 <template>
@@ -73,13 +73,8 @@ watch(
         :index="resolvePath(route) || route.redirect"
       >
         <template #title>
-          <div
-            v-if="toRaw(route.meta.icon)"
-            :class="['sub-menu-icon', route.meta.icon]"
-          >
-            <component
-              :is="useRenderIcon(route.meta && toRaw(route.meta.icon))"
-            />
+          <div v-if="toRaw(route.meta.icon)" :class="['sub-menu-icon', route.meta.icon]">
+            <component :is="useRenderIcon(route.meta && toRaw(route.meta.icon))" />
           </div>
           <div :style="getDivStyle">
             <span class="select-none">
@@ -106,20 +101,13 @@ watch(
         <template #dropdown>
           <el-dropdown-menu class="logout">
             <el-dropdown-item @click="logout">
-              <IconifyIconOffline
-                :icon="LogoutCircleRLine"
-                style="margin: 5px"
-              />
+              <IconifyIconOffline :icon="LogoutCircleRLine" style="margin: 5px" />
               退出系统
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <span
-        class="set-icon navbar-bg-hover"
-        title="打开系统配置"
-        @click="onPanel"
-      >
+      <span class="set-icon navbar-bg-hover" title="打开系统配置" @click="onPanel">
         <IconifyIconOffline :icon="Setting" />
       </span>
     </div>

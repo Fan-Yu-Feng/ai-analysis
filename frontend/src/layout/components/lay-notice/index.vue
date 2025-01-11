@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { noticesData } from "./data";
-import NoticeList from "./components/NoticeList.vue";
-import BellIcon from "@iconify-icons/ep/bell";
+import { ref, computed } from 'vue'
+import { noticesData } from './data'
+import NoticeList from './components/NoticeList.vue'
+import BellIcon from '@iconify-icons/ep/bell'
 
-const noticesNum = ref(0);
-const notices = ref(noticesData);
-const activeKey = ref(noticesData[0]?.key);
+const noticesNum = ref(0)
+const notices = ref(noticesData)
+const activeKey = ref(noticesData[0]?.key)
 
-notices.value.map(v => (noticesNum.value += v.list.length));
+notices.value.map((v) => (noticesNum.value += v.list.length))
 
 const getLabel = computed(
-  () => item =>
-    item.name + (item.list.length > 0 ? `(${item.list.length})` : "")
-);
+  () => (item) => item.name + (item.list.length > 0 ? `(${item.list.length})` : ''),
+)
 </script>
 
 <template>
@@ -23,7 +22,7 @@ const getLabel = computed(
         'dropdown-badge',
         'navbar-bg-hover',
         'select-none',
-        Number(noticesNum) !== 0 && 'mr-[10px]'
+        Number(noticesNum) !== 0 && 'mr-[10px]',
       ]"
     >
       <el-badge :value="Number(noticesNum) === 0 ? '' : noticesNum" :max="99">
@@ -40,11 +39,7 @@ const getLabel = computed(
           class="dropdown-tabs"
           :style="{ width: notices.length === 0 ? '200px' : '330px' }"
         >
-          <el-empty
-            v-if="notices.length === 0"
-            description="暂无消息"
-            :image-size="60"
-          />
+          <el-empty v-if="notices.length === 0" description="暂无消息" :image-size="60" />
           <span v-else>
             <template v-for="item in notices" :key="item.key">
               <el-tab-pane :label="getLabel(item)" :name="`${item.key}`">

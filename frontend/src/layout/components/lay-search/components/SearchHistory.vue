@@ -1,141 +1,137 @@
 <script setup lang="ts">
-import Sortable from "sortablejs";
-import SearchHistoryItem from "./SearchHistoryItem.vue";
-import type { optionsItem, dragItem, Props } from "../types";
-import { useEpThemeStoreHook } from "@/store/modules/epTheme";
-import { useResizeObserver, isArray, delay } from "@pureadmin/utils";
-import { ref, watch, nextTick, computed, getCurrentInstance } from "vue";
+import Sortable from 'sortablejs'
+import SearchHistoryItem from './SearchHistoryItem.vue'
+import type { optionsItem, dragItem, Props } from '../types'
+import { useEpThemeStoreHook } from '@/store/modules/epTheme'
+import { useResizeObserver, isArray, delay } from '@pureadmin/utils'
+import { ref, watch, nextTick, computed, getCurrentInstance } from 'vue'
 
 interface Emits {
-  (e: "update:value", val: string): void;
-  (e: "enter"): void;
-  (e: "collect", val: optionsItem): void;
-  (e: "delete", val: optionsItem): void;
-  (e: "drag", val: dragItem): void;
+  (e: 'update:value', val: string): void
+  (e: 'enter'): void
+  (e: 'collect', val: optionsItem): void
+  (e: 'delete', val: optionsItem): void
+  (e: 'drag', val: dragItem): void
 }
 
-const historyRef = ref();
-const innerHeight = ref();
+const historyRef = ref()
+const innerHeight = ref()
 /** 判断是否停止鼠标移入事件处理 */
-const stopMouseEvent = ref(false);
+const stopMouseEvent = ref(false)
 
-const emit = defineEmits<Emits>();
-const instance = getCurrentInstance()!;
-const props = withDefaults(defineProps<Props>(), {});
+const emit = defineEmits<Emits>()
+const instance = getCurrentInstance()!
+const props = withDefaults(defineProps<Props>(), {})
 
 const itemStyle = computed(() => {
-  return item => {
+  return (item) => {
     return {
-      background:
-        item?.path === active.value ? useEpThemeStoreHook().epThemeColor : "",
-      color: item.path === active.value ? "#fff" : "",
-      fontSize: item.path === active.value ? "16px" : "14px"
-    };
-  };
-});
+      background: item?.path === active.value ? useEpThemeStoreHook().epThemeColor : '',
+      color: item.path === active.value ? '#fff' : '',
+      fontSize: item.path === active.value ? '16px' : '14px',
+    }
+  }
+})
 
 const titleStyle = computed(() => {
   return {
     color: useEpThemeStoreHook().epThemeColor,
-    fontWeight: 500
-  };
-});
+    fontWeight: 500,
+  }
+})
 
 const active = computed({
   get() {
-    return props.value;
+    return props.value
   },
   set(val: string) {
-    emit("update:value", val);
-  }
-});
+    emit('update:value', val)
+  },
+})
 
 watch(
   () => props.value,
-  newValue => {
+  (newValue) => {
     if (newValue) {
       if (stopMouseEvent.value) {
-        delay(100).then(() => (stopMouseEvent.value = false));
+        delay(100).then(() => (stopMouseEvent.value = false))
       }
     }
-  }
-);
+  },
+)
 
 const historyList = computed(() => {
-  return props.options.filter(item => item.type === "history");
-});
+  return props.options.filter((item) => item.type === 'history')
+})
 
 const collectList = computed(() => {
-  return props.options.filter(item => item.type === "collect");
-});
+  return props.options.filter((item) => item.type === 'collect')
+})
 
 function handleCollect(item) {
-  emit("collect", item);
+  emit('collect', item)
 }
 
 function handleDelete(item) {
-  stopMouseEvent.value = true;
-  emit("delete", item);
+  stopMouseEvent.value = true
+  emit('delete', item)
 }
 
 /** 鼠标移入 */
 async function handleMouse(item) {
-  if (!stopMouseEvent.value) active.value = item.path;
+  if (!stopMouseEvent.value) active.value = item.path
 }
 
 function handleTo() {
-  emit("enter");
+  emit('enter')
 }
 
 function resizeResult() {
   // el-scrollbar max-height="calc(90vh - 140px)"
-  innerHeight.value = window.innerHeight - window.innerHeight / 10 - 140;
+  innerHeight.value = window.innerHeight - window.innerHeight / 10 - 140
 }
 
-useResizeObserver(historyRef, resizeResult);
+useResizeObserver(historyRef, resizeResult)
 
 function handleScroll(index: number) {
-  const curInstance = instance?.proxy?.$refs[`historyItemRef${index}`];
-  if (!curInstance) return 0;
-  const curRef = isArray(curInstance)
-    ? (curInstance[0] as ElRef)
-    : (curInstance as ElRef);
-  const scrollTop = curRef.offsetTop + 128; // 128 两个history-item（56px+56px=112px）高度加上下margin（8px+8px=16px）
-  return scrollTop > innerHeight.value ? scrollTop - innerHeight.value : 0;
+  const curInstance = instance?.proxy?.$refs[`historyItemRef${index}`]
+  if (!curInstance) return 0
+  const curRef = isArray(curInstance) ? (curInstance[0] as ElRef) : (curInstance as ElRef)
+  const scrollTop = curRef.offsetTop + 128 // 128 两个history-item（56px+56px=112px）高度加上下margin（8px+8px=16px）
+  return scrollTop > innerHeight.value ? scrollTop - innerHeight.value : 0
 }
 
 const handleChangeIndex = (evt): void => {
-  emit("drag", { oldIndex: evt.oldIndex, newIndex: evt.newIndex });
-};
+  emit('drag', { oldIndex: evt.oldIndex, newIndex: evt.newIndex })
+}
 
-let sortableInstance = null;
+let sortableInstance = null
 
 watch(
   collectList,
-  val => {
+  (val) => {
     if (val.length > 1) {
       nextTick(() => {
-        const wrapper: HTMLElement =
-          document.querySelector(".collect-container");
-        if (!wrapper || sortableInstance) return;
+        const wrapper: HTMLElement = document.querySelector('.collect-container')
+        if (!wrapper || sortableInstance) return
         sortableInstance = Sortable.create(wrapper, {
           animation: 160,
-          onStart: event => {
-            event.item.style.cursor = "move";
+          onStart: (event) => {
+            event.item.style.cursor = 'move'
           },
-          onEnd: event => {
-            event.item.style.cursor = "pointer";
+          onEnd: (event) => {
+            event.item.style.cursor = 'pointer'
           },
-          onUpdate: handleChangeIndex
-        });
-        resizeResult();
-      });
+          onUpdate: handleChangeIndex,
+        })
+        resizeResult()
+      })
     }
   },
-  { deep: true, immediate: true }
-);
+  { deep: true, immediate: true },
+)
 
-defineExpose({ handleScroll });
+defineExpose({ handleScroll })
 </script>
 
 <template>
@@ -151,16 +147,12 @@ defineExpose({ handleScroll });
         @click="handleTo"
         @mouseenter="handleMouse(item)"
       >
-        <SearchHistoryItem
-          :item="item"
-          @delete-item="handleDelete"
-          @collect-item="handleCollect"
-        />
+        <SearchHistoryItem :item="item" @delete-item="handleDelete" @collect-item="handleCollect" />
       </div>
     </template>
     <template v-if="collectList.length">
       <div :style="titleStyle">
-        {{ `收藏${collectList.length > 1 ? "（可拖拽排序）" : ""}` }}
+        {{ `收藏${collectList.length > 1 ? '（可拖拽排序）' : ''}` }}
       </div>
       <div class="collect-container">
         <div

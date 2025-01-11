@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useBoolean } from "../../hooks/useBoolean";
-import SearchModal from "./components/SearchModal.vue";
+import { useBoolean } from '../../hooks/useBoolean'
+import SearchModal from './components/SearchModal.vue'
 
-const { bool: show, toggle } = useBoolean();
+const { bool: show, toggle } = useBoolean()
 function handleSearch() {
-  toggle();
+  toggle()
 }
 </script>
 

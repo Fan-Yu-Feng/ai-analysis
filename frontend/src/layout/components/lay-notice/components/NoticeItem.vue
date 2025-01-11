@@ -1,56 +1,53 @@
 <script setup lang="ts">
-import { ListItem } from "../data";
-import { ref, PropType, nextTick } from "vue";
-import { useNav } from "@/layout/hooks/useNav";
-import { deviceDetection } from "@pureadmin/utils";
+import { ListItem } from '../data'
+import { ref, PropType, nextTick } from 'vue'
+import { useNav } from '@/layout/hooks/useNav'
+import { deviceDetection } from '@pureadmin/utils'
 
 defineProps({
   noticeItem: {
     type: Object as PropType<ListItem>,
-    default: () => {}
-  }
-});
+    default: () => {},
+  },
+})
 
-const titleRef = ref(null);
-const titleTooltip = ref(false);
-const descriptionRef = ref(null);
-const descriptionTooltip = ref(false);
-const { tooltipEffect } = useNav();
-const isMobile = deviceDetection();
+const titleRef = ref(null)
+const titleTooltip = ref(false)
+const descriptionRef = ref(null)
+const descriptionTooltip = ref(false)
+const { tooltipEffect } = useNav()
+const isMobile = deviceDetection()
 
 function hoverTitle() {
   nextTick(() => {
     titleRef.value?.scrollWidth > titleRef.value?.clientWidth
       ? (titleTooltip.value = true)
-      : (titleTooltip.value = false);
-  });
+      : (titleTooltip.value = false)
+  })
 }
 
 function hoverDescription(event, description) {
   // currentWidth 为文本在页面中所占的宽度，创建标签，加入到页面，获取currentWidth ,最后在移除
-  const tempTag = document.createElement("span");
-  tempTag.innerText = description;
-  tempTag.className = "getDescriptionWidth";
-  document.querySelector("body").appendChild(tempTag);
-  const currentWidth = (
-    document.querySelector(".getDescriptionWidth") as HTMLSpanElement
-  ).offsetWidth;
-  document.querySelector(".getDescriptionWidth").remove();
+  const tempTag = document.createElement('span')
+  tempTag.innerText = description
+  tempTag.className = 'getDescriptionWidth'
+  document.querySelector('body').appendChild(tempTag)
+  const currentWidth = (document.querySelector('.getDescriptionWidth') as HTMLSpanElement)
+    .offsetWidth
+  document.querySelector('.getDescriptionWidth').remove()
 
   // cellWidth为容器的宽度
-  const cellWidth = event.target.offsetWidth;
+  const cellWidth = event.target.offsetWidth
 
   // 当文本宽度大于容器宽度两倍时，代表文本显示超过两行
   currentWidth > 2 * cellWidth
     ? (descriptionTooltip.value = true)
-    : (descriptionTooltip.value = false);
+    : (descriptionTooltip.value = false)
 }
 </script>
 
 <template>
-  <div
-    class="notice-container border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]"
-  >
+  <div class="notice-container border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]">
     <el-avatar
       v-if="noticeItem.avatar"
       :size="30"
@@ -67,11 +64,7 @@ function hoverDescription(event, description) {
           placement="top-start"
           :enterable="!isMobile"
         >
-          <div
-            ref="titleRef"
-            class="notice-title-content"
-            @mouseover="hoverTitle"
-          >
+          <div ref="titleRef" class="notice-title-content" @mouseover="hoverTitle">
             {{ noticeItem.title }}
           </div>
         </el-tooltip>

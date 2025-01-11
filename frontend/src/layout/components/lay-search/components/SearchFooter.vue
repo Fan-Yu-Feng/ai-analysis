@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { useNav } from "@/layout/hooks/useNav";
-import MdiKeyboardEsc from "@/assets/svg/keyboard_esc.svg?component";
-import EnterOutlined from "@/assets/svg/enter_outlined.svg?component";
-import ArrowUpLine from "@iconify-icons/ri/arrow-up-line";
-import ArrowDownLine from "@iconify-icons/ri/arrow-down-line";
+import { useNav } from '@/layout/hooks/useNav'
+import MdiKeyboardEsc from '@/assets/svg/keyboard_esc.svg?component'
+import EnterOutlined from '@/assets/svg/enter_outlined.svg?component'
+import ArrowUpLine from '@iconify-icons/ri/arrow-up-line'
+import ArrowDownLine from '@iconify-icons/ri/arrow-down-line'
 
 withDefaults(defineProps<{ total: number }>(), {
-  total: 0
-});
+  total: 0,
+})
 
-const { device } = useNav();
+const { device } = useNav()
 </script>
 
 <template>

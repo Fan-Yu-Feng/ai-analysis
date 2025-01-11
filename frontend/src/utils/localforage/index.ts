@@ -1,15 +1,15 @@
-import forage from "localforage";
-import type { LocalForage, ProxyStorage, ExpiresData } from "./types";
+import forage from 'localforage'
+import type { LocalForage, ProxyStorage, ExpiresData } from './types'
 
 class StorageProxy implements ProxyStorage {
-  protected storage: LocalForage;
+  protected storage: LocalForage
   constructor(storageModel) {
-    this.storage = storageModel;
+    this.storage = storageModel
     this.storage.config({
       // 首选IndexedDB作为第一驱动，不支持IndexedDB会自动降级到localStorage（WebSQL被弃用，详情看https://developer.chrome.com/blog/deprecating-web-sql）
       driver: [this.storage.INDEXEDDB, this.storage.LOCALSTORAGE],
-      name: "pure-admin"
-    });
+      name: 'pure-admin',
+    })
   }
 
   /**
@@ -23,15 +23,15 @@ class StorageProxy implements ProxyStorage {
       this.storage
         .setItem(k, {
           data: v,
-          expires: m ? new Date().getTime() + m * 60 * 1000 : 0
+          expires: m ? new Date().getTime() + m * 60 * 1000 : 0,
         })
-        .then(value => {
-          resolve(value.data);
+        .then((value) => {
+          resolve(value.data)
         })
-        .catch(err => {
-          reject(err);
-        });
-    });
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 
   /**
@@ -45,12 +45,12 @@ class StorageProxy implements ProxyStorage {
         .then((value: ExpiresData<T>) => {
           value && (value.expires > new Date().getTime() || value.expires === 0)
             ? resolve(value.data)
-            : resolve(null);
+            : resolve(null)
         })
-        .catch(err => {
-          reject(err);
-        });
-    });
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 
   /**
@@ -62,12 +62,12 @@ class StorageProxy implements ProxyStorage {
       this.storage
         .removeItem(k)
         .then(() => {
-          resolve();
+          resolve()
         })
-        .catch(err => {
-          reject(err);
-        });
-    });
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 
   /**
@@ -78,12 +78,12 @@ class StorageProxy implements ProxyStorage {
       this.storage
         .clear()
         .then(() => {
-          resolve();
+          resolve()
         })
-        .catch(err => {
-          reject(err);
-        });
-    });
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 
   /**
@@ -93,17 +93,17 @@ class StorageProxy implements ProxyStorage {
     return new Promise<string[]>((resolve, reject) => {
       this.storage
         .keys()
-        .then(keys => {
-          resolve(keys);
+        .then((keys) => {
+          resolve(keys)
         })
-        .catch(err => {
-          reject(err);
-        });
-    });
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 }
 
 /**
  * 二次封装 [localforage](https://localforage.docschina.org/) 支持设置过期时间，提供完整的类型提示
  */
-export const localForage = () => new StorageProxy(forage);
+export const localForage = () => new StorageProxy(forage)

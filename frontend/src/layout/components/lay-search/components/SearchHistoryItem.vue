@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import type { optionsItem } from "../types";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import StarIcon from "@iconify-icons/ep/star";
-import CloseIcon from "@iconify-icons/ep/close";
+import type { optionsItem } from '../types'
+import { useRenderIcon } from '@/components/ReIcon/src/hooks'
+import StarIcon from '@iconify-icons/ep/star'
+import CloseIcon from '@iconify-icons/ep/close'
 
 interface Props {
-  item: optionsItem;
+  item: optionsItem
 }
 
 interface Emits {
-  (e: "collectItem", val: optionsItem): void;
-  (e: "deleteItem", val: optionsItem): void;
+  (e: 'collectItem', val: optionsItem): void
+  (e: 'deleteItem', val: optionsItem): void
 }
 
-const emit = defineEmits<Emits>();
-withDefaults(defineProps<Props>(), {});
+const emit = defineEmits<Emits>()
+withDefaults(defineProps<Props>(), {})
 
 function handleCollect(item) {
-  emit("collectItem", item);
+  emit('collectItem', item)
 }
 
 function handleDelete(item) {
-  emit("deleteItem", item);
+  emit('deleteItem', item)
 }
 </script>
 

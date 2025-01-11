@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { getTopMenu } from "@/router/utils";
-import { useNav } from "@/layout/hooks/useNav";
+import { getTopMenu } from '@/router/utils'
+import { useNav } from '@/layout/hooks/useNav'
 
 defineProps({
-  collapse: Boolean
-});
+  collapse: Boolean,
+})
 
-const { title, getLogo } = useNav();
+const { title, getLogo } = useNav()
 </script>
 
 <template>
