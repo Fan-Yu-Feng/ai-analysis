@@ -13,4 +13,4 @@ from ai_analytics.sql_app.vo.TaskConfigVO import TaskConfigCreateSchema, TaskCon
 
 
 class TaskConfigService(BaseService[TaskConfigDO, TaskConfigCreateSchema, TaskConfigUpdateSchema]):
-    dao = TaskConfigDAO
+	dao = TaskConfigDAO()

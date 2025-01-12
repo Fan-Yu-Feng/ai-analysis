@@ -10,7 +10,7 @@ from typing import Generic, List
 
 from ai_analytics.sql_app.dao.BaseDAO import BaseDAO
 from ai_analytics.sql_app.vo.schemas import ModelType, CreateSchema, UpdateSchema
-
+from ai_analytics.common.log import logger
 
 class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
 	dao: BaseDAO
@@ -22,8 +22,9 @@ class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
 	def total(self, id) -> int:
 		return self.dao.count()
 
-	def get_by_id(self, id, pk: int) -> ModelType:
+	def get_by_id(self, pk: int) -> ModelType:
 		"""Get by id"""
+		logger.info(f'pk: {pk}')
 		return self.dao.get_by_id(pk)
 
 	def create(self, id, obj_in: CreateSchema) -> ModelType:

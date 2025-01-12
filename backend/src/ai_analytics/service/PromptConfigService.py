@@ -13,4 +13,4 @@ from ai_analytics.sql_app.vo.PromptConfigVO import PromptConfigCreateSchema, Pro
 
 
 class PromptConfigService(BaseService[PromptConfigDO, PromptConfigCreateSchema, PromptConfigUpdateSchema]):
-    dao = PromptConfigDAO
+    dao = PromptConfigDAO()

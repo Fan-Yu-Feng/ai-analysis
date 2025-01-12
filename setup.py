@@ -13,7 +13,7 @@ from fastapi import FastAPI
 
 from ai_analytics import routes, middlewares
 from ai_analytics.config import settings
-from ai_analytics.common import init_log
+from ai_analytics.common.log import init_log
 
 
 class Server:
