@@ -52,14 +52,14 @@ export default defineFlatConfig([
       ...pluginPrettier.configs.recommended.rules,
       'no-debugger': 'off',
       'no-unused-vars': [
-        'warn',
+        'error',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
         },
       ],
       'prettier/prettier': [
-        'warn',
+        'error',
         {
           endOfLine: 'auto',
         },
@@ -158,7 +158,7 @@ export default defineFlatConfig([
       'vue/multi-word-component-names': 'off',
       'vue/no-setup-props-reactivity-loss': 'off',
       'vue/html-self-closing': [
-        'warn',
+        'error',
         {
           html: {
             void: 'always',

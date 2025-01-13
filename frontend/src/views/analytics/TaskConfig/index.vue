@@ -8,7 +8,7 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="评论配置表 id" prop="promptConfigId">
+      <el-form-item label="id" prop="promptConfigId">
         <el-input
           v-model="queryParams.promptConfigId"
           placeholder="请输入评论配置表 id"
@@ -27,15 +27,6 @@
           <el-option label="请选择字典生成" value="" />
         </el-select>
       </el-form-item>
-      <el-form-item label="任务优先级" prop="priority">
-        <el-input
-          v-model="queryParams.priority"
-          placeholder="请输入任务优先级"
-          clearable
-          class="!w-240px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="配置明细" prop="configDetail">
         <el-input
           v-model="queryParams.configDetail"
@@ -45,45 +36,7 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="错误信息，如果任务失败则记录错误信息" prop="errorMessage">
-        <el-input
-          v-model="queryParams.errorMessage"
-          placeholder="请输入错误信息，如果任务失败则记录错误信息"
-          clearable
-          class="!w-240px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建者" prop="createBy">
-        <el-input
-          v-model="queryParams.createBy"
-          placeholder="请输入创建者"
-          clearable
-          class="!w-240px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="修改者" prop="updateBy">
-        <el-input
-          v-model="queryParams.updateBy"
-          placeholder="请输入修改者"
-          clearable
-          class="!w-240px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createTime">
-        <el-date-picker
-          v-model="queryParams.createTime"
-          value-format="YYYY-MM-DD HH:mm:ss"
-          type="daterange"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
-        />
-      </el-form-item>
-      <el-form-item label="任务类型：评论分析、舆情分析，等等" prop="taskType">
+      <el-form-item label="任务类型" prop="taskType">
         <el-select
           v-model="queryParams.taskType"
           placeholder="请选择任务类型：评论分析、舆情分析，等等"
@@ -111,19 +64,11 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
-      <el-table-column label="评论配置表 id" align="center" prop="promptConfigId" />
-      <el-table-column
-        label="任务状态：待处理、处理中、已完成、失败"
-        align="center"
-        prop="status"
-      />
-      <el-table-column label="任务优先级，数值越大优先级越高" align="center" prop="priority" />
+      <el-table-column label="id" align="center" prop="promptConfigId" />
+      <el-table-column label="任务状态" align="center" prop="status" />
+      <el-table-column label="优先级" align="center" prop="priority" />
       <el-table-column label="配置明细" align="center" prop="configDetail" />
-      <el-table-column
-        label="错误信息，如果任务失败则记录错误信息"
-        align="center"
-        prop="errorMessage"
-      />
+      <el-table-column label="错误信息" align="center" prop="errorMessage" />
       <el-table-column label="创建者" align="center" prop="createBy" />
       <el-table-column label="修改者" align="center" prop="updateBy" />
       <el-table-column
@@ -133,7 +78,7 @@
         :formatter="dateFormatter"
         width="180px"
       />
-      <el-table-column label="任务类型：评论分析、舆情分析，等等" align="center" prop="taskType" />
+      <el-table-column label="任务类型" align="center" prop="taskType" />
       <el-table-column label="操作" align="center">
         <template #default="scope">
           <el-button
@@ -171,7 +116,7 @@
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
 import download from '@/utils/download'
-import { TaskTaskConfigApi, ConfigVO, TaskConfigApi } from '@/api/taskConfig'
+import { ConfigVO, TaskConfigApi } from '@/api/taskConfig'
 import ConfigForm from './ConfigForm.vue'
 
 /** 任务配置 列表 */

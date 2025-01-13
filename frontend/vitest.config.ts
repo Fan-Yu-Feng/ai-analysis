@@ -1,19 +1,14 @@
-// import { fileURLToPath, URL } from 'node:url'
-
-// import { defineConfig } from 'vite'
-// import vue from '@vitejs/plugin-vue'
-// import vueDevTools from 'vite-plugin-vue-devtools'
-
-// https://vite.dev/config/
 import { getPluginsList } from './build/plugins'
+
 import { include, exclude } from './build/optimize'
 import { type UserConfigExport, type ConfigEnv, loadEnv } from 'vite'
 import { root, alias, wrapperEnv, pathResolve, __APP_INFO__ } from './build/utils'
 
 export default ({ mode }: ConfigEnv): UserConfigExport => {
-  const { VITE_CDN, VITE_PORT, VITE_COMPRESSION, VITE_PUBLIC_PATH } = wrapperEnv(
+  const { VITE_CDN, VITE_PORT, VITE_COMPRESSION, VITE_PUBLIC_PATH, VITE_BASE_URL } = wrapperEnv(
     loadEnv(mode, root),
   )
+
   return {
     base: VITE_PUBLIC_PATH,
     root,
@@ -26,7 +21,14 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       port: VITE_PORT,
       host: '0.0.0.0',
       // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
-      proxy: {},
+      proxy: {
+        // 代理所有以 /api 开头的请求
+        '/api': {
+          target: 'http://192.168.14.31:8000', // 目标服务器
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''), // 重写路径
+        },
+      }
       // 预热文件以提前转换和缓存结果，降低启动期间的初始页面加载时长并防止转换瀑布
       warmup: {
         clientFiles: ['./index.html', './src/{views,components}/*'],
