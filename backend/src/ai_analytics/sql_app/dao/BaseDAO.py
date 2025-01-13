@@ -45,10 +45,10 @@ class BaseDAO(Generic[ModelType, CreateSchema, UpdateSchema]):
 		""" 获取所有记录 """
 		raise AttributeError("this method not allowed")
 
-	def get_page_by_start_id(self, page: int, page_size: int, start_id: int = 0) -> List[ModelType]:
-		if page < 1:
-			page = 1
-		offset = (page - 1) * page_size
+	def get_page_by_start_id(self, page_no: int, page_size: int, start_id: int = 0) -> List[ModelType]:
+		if page_no < 1:
+			page_no = 1
+		offset = (page_no - 1) * page_size
 		return self.session.query(self._model).where(self._model.id > start_id).order_by("id").limit(page_size).offset(
 			offset).all()
 
@@ -81,23 +81,23 @@ class BaseDAO(Generic[ModelType, CreateSchema, UpdateSchema]):
 		self.session.commit()
 		return cnt
 
-	def update_by_filters(self, update_do: BaseDO, **kwargs) -> int:
+	def update_by_filters(self, req_vo: UpdateSchema, **kwargs) -> int:
 		""" 更新记录 """
 		query = self.session.query(self._model)
 		for key, value in kwargs.items():
 			query = query.filter(getattr(self._model, key) == value)
 		update_obj = {}
-		for key, value in update_do.dict.items():
+		for key, value in req_vo.dict.items():
 			if value is not None:
 				update_obj[key] = value
 		cnt = query.update(update_obj)
 		self.session.commit()
 		return cnt
 
-	def update_by_filters_do(self, update_data: BaseDO, req_do: BaseDO) -> int:
+	def update_by_filters_do(self, update_data: BaseDO, req_vo: UpdateSchema) -> int:
 		""" 更新记录 """
 		query = self.session.query(self._model)
-		for key, value in req_do.dict.items():
+		for key, value in req_vo.dict.items():
 			if value is not None:
 				query = query.filter(getattr(self._model, key) == value)
 		update_obj = {}

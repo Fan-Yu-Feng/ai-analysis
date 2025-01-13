@@ -21,15 +21,15 @@ router = APIRouter()
 _service = TaskConfigService()
 
 
-@router.get('/task-config')
-def get(
+@router.get('/task-config/page')
+def get_by_page(
 		session: Session = Depends(get_db),
 		commons: CommonQueryParams = Depends()
 ):
-	return _service.get_by_page(page=commons.page, page_size=commons.page_size)
+	return _service.get_by_page(page_no=commons.page_no, page_size=commons.page_size)
 
 
-@router.get('/task-config/{pk}')
+@router.get('/task-config/get-by-id/{pk}')
 def get_by_id(
 		pk: int,
 		session: Session = Depends(get_db)
@@ -38,7 +38,7 @@ def get_by_id(
 	return _service.get_by_id(pk)
 
 
-@router.post('/task-config', response_model=TaskConfigSchema)
+@router.post('/task-config/add', response_model=TaskConfigSchema)
 def create(
 		obj_in: TaskConfigCreateSchema,
 		session: Session = Depends(get_db),
@@ -46,16 +46,15 @@ def create(
 	return _service.create(obj_in)
 
 
-@router.patch('/task-config/{pk}', response_model=TaskConfigSchema)
+@router.post('/task-config/update', response_model=TaskConfigSchema)
 def patch(
-		pk: int,
 		obj_in: TaskConfigUpdateSchema,
 		session: Session = Depends(get_db)
 ):
-	return _service.patch(obj_in)
+	return _service.update(obj_in)
 
 
-@router.delete('/task-config/{pk}')
+@router.delete('/task-config/delete/{pk}')
 def delete(
 		pk: int,
 		session: Session = Depends(get_db)

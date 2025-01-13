@@ -5,7 +5,7 @@ LOG_LEVEL: DEBUG
 # mysql+pymysql://root:oneapimmysql@192.168.15.8:3306/ai_comment"
 DATABASE:
   DRIVER: mysql+pymysql
-  NAME: ai-comment
+  NAME: ai_comment
   HOST: 192.168.15.8
   PORT: 3306
   USERNAME: root

@@ -8,6 +8,15 @@ from ai_analytics.sql_app.dataobject.BaseDO import BaseDO
 ModelType = TypeVar('ModelType', bound=BaseDO)
 CreateSchema = TypeVar('CreateSchema', bound=BaseModel)
 UpdateSchema = TypeVar('UpdateSchema', bound=BaseModel)
+
+class BaseRespVO(BaseModel):
+	id: int
+	create_time: datetime
+	update_time: datetime
+	create_by: int
+	update_by: int
+	deleted: int
+
 class SocialMediaCommentList(BaseModel):
 	platform: str
 	platform_account_id: str

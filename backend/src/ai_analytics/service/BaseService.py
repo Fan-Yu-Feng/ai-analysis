@@ -15,11 +15,11 @@ from ai_analytics.common.log import logger
 class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
 	dao: BaseDAO
 
-	def get_by_page(self, page=1, page_size=10) -> List[ModelType]:
+	def get_by_page(self, page_no=1, page_size=10) -> List[ModelType]:
 		""""""
-		return self.dao.get_page_by_start_id(page, page_size)
+		return self.dao.get_page_by_start_id(page_no, page_size)
 
-	def total(self, id) -> int:
+	def total(self, reqVo:CreateSchema) -> int:
 		return self.dao.count()
 
 	def get_by_id(self, pk: int) -> ModelType:
@@ -31,7 +31,7 @@ class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
 		"""Create a object"""
 		return self.dao.add(obj_in)
 
-	def patch(self, obj_in: UpdateSchema) -> ModelType:
+	def update(self, obj_in: UpdateSchema) -> ModelType:
 		"""Update"""
 		return self.dao.update_by_id(obj_in)
 

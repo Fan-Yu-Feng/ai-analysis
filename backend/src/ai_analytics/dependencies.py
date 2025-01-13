@@ -17,11 +17,11 @@ def get_db(request: Request) -> Session:
 
 
 class CommonQueryParams:
-    def __init__(self, offset: int = 1, limit: int = 10):
-        self.offset = offset - 1
-        if self.offset < 0:
-            self.offset = 0
-        self.limit = limit
+    def __init__(self, page_no: int = 1, page_size: int = 10):
+        self.page_no = page_no
+        if self.page_no < 1:
+            self.page_no = 1
+        self.page_size = page_size
 
-        if self.limit < 0:
-            self.limit = 10
+        if self.page_size < 0:
+            self.page_size = 10
