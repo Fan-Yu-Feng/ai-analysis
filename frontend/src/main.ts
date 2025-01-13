@@ -6,6 +6,8 @@ import { MotionPlugin } from '@vueuse/motion'
 // import { useEcharts } from "@/plugins/echarts";
 import { createApp, type Directive } from 'vue'
 import { useElementPlus } from '@/plugins/elementPlus'
+import { setupElementPlus } from '@/plugins/elementPlus2'
+
 import { injectResponsiveStorage } from '@/utils/responsive'
 
 import Table from '@pureadmin/table'
@@ -52,6 +54,7 @@ getPlatformConfig(app).then(async (config) => {
   setupStore(app)
   app.use(router)
   await router.isReady()
+  setupElementPlus(app)
   injectResponsiveStorage(app, config)
   app.use(MotionPlugin).use(useElementPlus).use(Table)
   // .use(PureDescriptions)

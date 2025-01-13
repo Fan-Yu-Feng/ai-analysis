@@ -6,6 +6,7 @@
 
 // https://vite.dev/config/
 import { getPluginsList } from './build/plugins'
+
 import { include, exclude } from './build/optimize'
 import { type UserConfigExport, type ConfigEnv, loadEnv } from 'vite'
 import { root, alias, wrapperEnv, pathResolve, __APP_INFO__ } from './build/utils'
