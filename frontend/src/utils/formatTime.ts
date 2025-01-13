@@ -9,7 +9,7 @@ export const defaultShortcuts = [
     text: '今天',
     value: () => {
       return new Date()
-    }
+    },
   },
   {
     text: '昨天',
@@ -17,7 +17,7 @@ export const defaultShortcuts = [
       const date = new Date()
       date.setTime(date.getTime() - 3600 * 1000 * 24)
       return [date, date]
-    }
+    },
   },
   {
     text: '最近七天',
@@ -25,7 +25,7 @@ export const defaultShortcuts = [
       const date = new Date()
       date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
       return [date, new Date()]
-    }
+    },
   },
   {
     text: '最近 30 天',
@@ -33,7 +33,7 @@ export const defaultShortcuts = [
       const date = new Date()
       date.setTime(date.getTime() - 3600 * 1000 * 24 * 30)
       return [date, new Date()]
-    }
+    },
   },
   {
     text: '本月',
@@ -41,15 +41,15 @@ export const defaultShortcuts = [
       const date = new Date()
       date.setDate(1) // 设置为当前月的第一天
       return [date, new Date()]
-    }
+    },
   },
   {
     text: '今年',
     value: () => {
       const date = new Date()
       return [new Date(`${date.getFullYear()}-01-01`), date]
-    }
-  }
+    },
+  },
 ]
 
 /**
@@ -249,15 +249,15 @@ export function betweenDay(param1: Date, param2: Date): number {
  */
 export function betweenHour(msTime): string {
   if (!msTime) return `0秒`
-  const time = msTime / 1000;
-  let hour = (Math.floor(time / 60 / 60)).toString();
-  hour = hour.padStart(2, "0");
-  let minute = (Math.floor(time / 60) % 60).toString();
-  minute = minute.padStart(2, "0");
-  let second = (Math.floor(time) % 60).toString();
-  second = second.padStart(2, "0");
+  const time = msTime / 1000
+  let hour = Math.floor(time / 60 / 60).toString()
+  hour = hour.padStart(2, '0')
+  let minute = (Math.floor(time / 60) % 60).toString()
+  minute = minute.padStart(2, '0')
+  let second = (Math.floor(time) % 60).toString()
+  second = second.padStart(2, '0')
 
-  return `${hour}时${minute}分${second}秒`;
+  return `${hour}时${minute}分${second}秒`
 }
 
 /**
@@ -301,7 +301,7 @@ export function isSameDay(a: dayjs.ConfigType, b: dayjs.ConfigType): boolean {
  */
 export function getDayRange(
   date: dayjs.ConfigType,
-  days: number
+  days: number,
 ): [dayjs.ConfigType, dayjs.ConfigType] {
   const day = dayjs(date).add(days, 'd')
   return getDateRange(day, day)
@@ -341,11 +341,11 @@ export function getLast1Year(): [dayjs.ConfigType, dayjs.ConfigType] {
  */
 export function getDateRange(
   beginDate: dayjs.ConfigType,
-  endDate: dayjs.ConfigType
+  endDate: dayjs.ConfigType,
 ): [string, string] {
   return [
     dayjs(beginDate).startOf('d').format('YYYY-MM-DD HH:mm:ss'),
-    dayjs(endDate).endOf('d').format('YYYY-MM-DD HH:mm:ss')
+    dayjs(endDate).endOf('d').format('YYYY-MM-DD HH:mm:ss'),
   ]
 }
 
@@ -356,8 +356,8 @@ export function getDateRange(
  */
 export function getLastDayOfMonth(year, month) {
   // 注意月份从0开始，所以要减去1
-  const lastDay = new Date(year, month + 1, 0);
-  return lastDay.getDate();
+  const lastDay = new Date(year, month + 1, 0)
+  return lastDay.getDate()
 }
 
 /**
@@ -367,6 +367,6 @@ export function getLastDayOfMonth(year, month) {
  */
 export function getLastTimeOfMonth(year, month) {
   //因为月份是从0开始的，前面传进来的月份加过1了，所以这里要减去1
-  const timeMonth = month-1
-  return `${year}-${month<10?'0'+month:month}-${getLastDayOfMonth(year, timeMonth)} 23:59:59`
+  const timeMonth = month - 1
+  return `${year}-${month < 10 ? '0' + month : month}-${getLastDayOfMonth(year, timeMonth)} 23:59:59`
 }

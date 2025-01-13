@@ -180,10 +180,10 @@ export const fileSizeFormatter = (row, column, cellValue) => {
 export const copyValueToTarget = (target: any, source: any) => {
   const newObj = Object.assign({}, target, source)
   // 删除多余属性
-  Object.keys(newObj).forEach((key) => {
+  Object.keys(newObj).forEach((key: any) => {
     // 如果不是target中的属性则删除
     if (Object.keys(target).indexOf(key) === -1) {
-      delete newObj[key]
+      delete newObj.key
     }
   })
   // 更新目标对象值

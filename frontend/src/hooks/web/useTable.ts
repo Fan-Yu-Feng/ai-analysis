@@ -46,21 +46,21 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     tableList: [],
     // AxiosConfig 配置
     params: {
-      ...(config?.defaultParams || {})
+      ...(config?.defaultParams || {}),
     },
     // 加载中
     loading: true,
     // 导出加载中
     exportLoading: false,
     // 当前行的数据
-    currentRow: null
+    currentRow: null,
   })
 
   const paramsObj = computed(() => {
     return {
       ...tableObject.params,
       pageSize: tableObject.pageSize,
-      pageNo: tableObject.currentPage
+      pageNo: tableObject.currentPage,
     }
   })
 
@@ -68,7 +68,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     () => tableObject.currentPage,
     () => {
       methods.getList()
-    }
+    },
   )
 
   watch(
@@ -81,7 +81,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
         tableObject.currentPage = 1
         methods.getList()
       }
-    }
+    },
   )
 
   // Table实例
@@ -111,7 +111,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
       await Promise.all(
         ids.map(async (id: string | number) => {
           await (config?.delListApi && config?.delListApi(id))
-        })
+        }),
       )
     } else {
       await (config?.delListApi && config?.delListApi(ids))
@@ -156,7 +156,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
       tableObject.params = Object.assign(tableObject.params, {
         pageSize: tableObject.pageSize,
         pageNo: 1,
-        ...data
+        ...data,
       })
       // 页码不等于1时更新页码重新获取数据，页码等于1时重新获取数据
       if (tableObject.currentPage !== 1) {
@@ -169,7 +169,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     delList: async (
       ids: string | number | string[] | number[],
       multiple: boolean,
-      message = true
+      message = true,
     ) => {
       const tableRef = await getTable()
       if (multiple) {
@@ -182,7 +182,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
         ElMessageBox.confirm(t('common.delMessage'), t('common.confirmTitle'), {
           confirmButtonText: t('common.ok'),
           cancelButtonText: t('common.cancel'),
-          type: 'warning'
+          type: 'warning',
         }).then(async () => {
           await delData(ids)
         })
@@ -196,7 +196,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
       ElMessageBox.confirm(t('common.exportMessage'), t('common.confirmTitle'), {
         confirmButtonText: t('common.ok'),
         cancelButtonText: t('common.cancel'),
-        type: 'warning'
+        type: 'warning',
       })
         .then(async () => {
           const res = await config?.exportListApi?.(unref(paramsObj) as unknown as T)
@@ -207,7 +207,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
         .finally(() => {
           tableObject.exportLoading = false
         })
-    }
+    },
   }
 
   config?.props && methods.setProps(config.props)
@@ -218,6 +218,6 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     tableObject,
     methods,
     // add by admin：返回 tableMethods 属性，和 tableObject 更统一
-    tableMethods: methods
+    tableMethods: methods,
   }
 }

@@ -1,4 +1,4 @@
-import variables from '@/styles/global.module.scss'
+import variables from '@/style/global.module.scss'
 
 export const useDesign = () => {
   const scssVariables = variables

@@ -10,7 +10,7 @@ declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const ElAutoResizer: typeof import('element-plus/es')['ElAutoResizer']
   const ElPopover: typeof import('element-plus/es')['ElPopover']
-  const ElPopoverDirective: typeof import('element-plus/es')['ElPopoverDirective']
+  const ElPopoverDirective: (typeof import('element-plus/es'))['ElPopoverDirective']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
   const customRef: typeof import('vue')['customRef']

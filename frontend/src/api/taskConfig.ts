@@ -18,7 +18,7 @@ export interface ConfigVO {
   taskType: string // 任务类型：评论分析、舆情分析，等等
 }
 
-type TaskConfigReqParams = {
+export type TaskConfigReqParams = {
   status: string
   task_type: string
   priority?: number

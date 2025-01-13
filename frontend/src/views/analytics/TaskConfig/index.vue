@@ -17,7 +17,7 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="任务状态：待处理、处理中、已完成、失败" prop="status">
+      <el-form-item label="任务状态" prop="status">
         <el-select
           v-model="queryParams.status"
           placeholder="请选择任务状态：待处理、处理中、已完成、失败"
@@ -27,10 +27,10 @@
           <el-option label="请选择字典生成" value="" />
         </el-select>
       </el-form-item>
-      <el-form-item label="任务优先级，数值越大优先级越高" prop="priority">
+      <el-form-item label="任务优先级" prop="priority">
         <el-input
           v-model="queryParams.priority"
-          placeholder="请输入任务优先级，数值越大优先级越高"
+          placeholder="请输入任务优先级"
           clearable
           class="!w-240px"
           @keyup.enter="handleQuery"
@@ -104,15 +104,6 @@
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
-        <el-button
-          v-hasPermi="['task:config:export']"
-          type="success"
-          plain
-          :loading="exportLoading"
-          @click="handleExport"
-        >
-          <Icon icon="ep:download" class="mr-5px" /> 导出
-        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -180,7 +171,7 @@
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
 import download from '@/utils/download'
-import { TaskTaskConfigApi, ConfigVO } from '@/api/taskConfig'
+import { TaskTaskConfigApi, ConfigVO, TaskConfigApi } from '@/api/taskConfig'
 import ConfigForm from './ConfigForm.vue'
 
 /** 任务配置 列表 */
@@ -212,7 +203,7 @@ const exportLoading = ref(false) // 导出的加载中
 const getList = async () => {
   loading.value = true
   try {
-    const data = await TaskConfigApi.getConfigPage(queryParams)
+    const data = await TaskConfigApi.getTypeTaskPage({})
     list.value = data.list
     total.value = data.total
   } finally {
@@ -244,26 +235,11 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await TaskConfigApi.deleteConfig(id)
+    await TaskConfigApi.delete(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()
   } catch {}
-}
-
-/** 导出按钮操作 */
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    const data = await TaskConfigApi.exportConfig(queryParams)
-    download.excel(data, '任务配置.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
 }
 
 /** 初始化 **/

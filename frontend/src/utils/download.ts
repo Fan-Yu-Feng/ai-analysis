@@ -32,7 +32,7 @@ const download = {
   // 下载 Markdown 方法
   markdown: (data: Blob, fileName: string) => {
     download0(data, fileName, 'text/markdown')
-  }
+  },
 }
 
 export default download

@@ -1,15 +1,9 @@
-import axios, {
-  type AxiosError,
-  type AxiosInstance,
-  type AxiosRequestHeaders,
-  type AxiosResponse,
-  type InternalAxiosRequestConfig,
-} from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 
 import { config } from '@/config/axios/config'
 import { getProtocol } from '@/utils'
 
-const { result_code, base_url, request_timeout } = config
+const { base_url, request_timeout } = config
 
 // 是否显示重新登录
 export const isRelogin = { show: false }
