@@ -27,7 +27,7 @@ class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
 		logger.info(f'pk: {pk}')
 		return self.dao.get_by_id(pk)
 
-	def create(self, id, obj_in: CreateSchema) -> ModelType:
+	def create(self, obj_in: CreateSchema) -> ModelType:
 		"""Create a object"""
 		return self.dao.add(obj_in)
 

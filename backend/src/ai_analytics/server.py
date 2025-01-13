@@ -9,10 +9,12 @@
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 
 from ai_analytics import routes, middlewares
 from ai_analytics.config import settings
 from ai_analytics.common.log import init_log
+from ai_analytics.middlewares import global_exception_handler
 
 
 class Server:
@@ -23,6 +25,7 @@ class Server:
 
 	def init_app(self):
 		middlewares.init_middleware(self.app)
+
 		routes.init_routers(self.app)
 
 	def run(self):

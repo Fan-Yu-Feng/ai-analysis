@@ -55,8 +55,9 @@ class BaseDAO(Generic[ModelType, CreateSchema, UpdateSchema]):
 	def add(self, obj_in: CreateSchema) -> None:
 		""" 添加新记录 """
 		obj = self._model(**jsonable_encoder(obj_in))
-		self.session.add(obj)
-		self.session.flush()
+		cnt = self.session.add(obj)
+		self.session.commit()
+		return cnt
 
 	def add_all(self, obj_list: List[BaseDO]) -> None:
 		"""

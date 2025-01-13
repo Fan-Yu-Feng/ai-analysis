@@ -10,12 +10,13 @@ CreateSchema = TypeVar('CreateSchema', bound=BaseModel)
 UpdateSchema = TypeVar('UpdateSchema', bound=BaseModel)
 
 class BaseRespVO(BaseModel):
-	id: int
-	create_time: datetime
-	update_time: datetime
-	create_by: int
-	update_by: int
-	deleted: int
+	# id: int
+	# create_time: datetime
+	# update_time: datetime
+	# create_by: int
+	# update_by: int
+	# deleted: int
+	pass
 
 class SocialMediaCommentList(BaseModel):
 	platform: str
