@@ -15,6 +15,14 @@ from fastapi import FastAPI, Request, Response
 from ai_analytics.sql_app.config.database import SessionLocal
 
 
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:8848",
+]
+from fastapi.middleware.cors import CORSMiddleware
+
+
 async def db_session_middleware(request: Request, call_next: Callable) -> Response:
     response = Response('Internal server error', status_code=500)
     try:
@@ -28,3 +36,10 @@ async def db_session_middleware(request: Request, call_next: Callable) -> Respon
 
 def init_middleware(app: FastAPI) -> None:
     app.middleware('http')(db_session_middleware)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
