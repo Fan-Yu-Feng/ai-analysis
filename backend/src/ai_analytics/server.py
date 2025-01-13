@@ -35,3 +35,7 @@ class Server:
 			host=settings.HOST,
 			port=settings.PORT,
 		)
+
+
+if __name__ == '__main__':
+	Server().run()

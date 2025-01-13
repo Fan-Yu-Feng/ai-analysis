@@ -8,33 +8,36 @@
 """
 from typing import Generic, List
 
+from sqlalchemy.orm import Session
+
 from ai_analytics.sql_app.dao.BaseDAO import BaseDAO
 from ai_analytics.sql_app.vo.schemas import ModelType, CreateSchema, UpdateSchema
 from ai_analytics.common.log import logger
 
+
 class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
 	dao: BaseDAO
 
-	def get_by_page(self, page_no=1, page_size=10) -> List[ModelType]:
+	def get_by_page(self, session: Session = None, page_no=1, page_size=10, ) -> List[ModelType]:
 		""""""
-		return self.dao.get_page_by_start_id(page_no, page_size)
+		return self.dao.get_page_by_start_id(session,page_no, page_size)
 
-	def total(self, reqVo:CreateSchema) -> int:
-		return self.dao.count()
+	def total(self, session: Session, reqVo: CreateSchema) -> int:
+		return self.dao.count(session)
 
-	def get_by_id(self, pk: int) -> ModelType:
+	def get_by_id(self, session: Session,pk: int) -> ModelType:
 		"""Get by id"""
 		logger.info(f'pk: {pk}')
-		return self.dao.get_by_id(pk)
+		return self.dao.get_by_id(session,pk)
 
-	def create(self, obj_in: CreateSchema) -> ModelType:
+	def create(self, session: Session, obj_in: CreateSchema) -> ModelType:
 		"""Create a object"""
-		return self.dao.add(obj_in)
+		return self.dao.add(session,obj_in)
 
-	def update(self, obj_in: UpdateSchema) -> ModelType:
+	def update(self, session: Session,obj_in: UpdateSchema) -> ModelType:
 		"""Update"""
-		return self.dao.update_by_id(obj_in)
+		return self.dao.update_by_id(session,obj_in)
 
-	def delete(self, pk: int) -> int:
+	def delete(self,session: Session, pk: int) -> int:
 		"""Delete a object"""
-		return self.dao.delete_by_id(pk)
+		return self.dao.delete_by_id(session,pk)

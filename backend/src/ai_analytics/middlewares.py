@@ -12,6 +12,7 @@ from typing import Callable
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 
+from ai_analytics.common.log import logger
 from ai_analytics.sql_app.config.database import SessionLocal
 
 origins = [
@@ -39,6 +40,7 @@ from ai_analytics.controller import ResponseModel
 
 
 async def global_exception_handler(request: Request, exc: Exception):
+	logger.error(f"Unhandled exception: {exc}", exc_info=True)
 	if isinstance(exc, HTTPException):
 		return JSONResponse(
 			status_code=exc.status_code,
@@ -46,12 +48,22 @@ async def global_exception_handler(request: Request, exc: Exception):
 		)
 	return JSONResponse(
 		status_code=500,
-		content=ResponseModel(code=500, msg="Internal Server Error", data=None).dict()
+		content=ResponseModel(code=500, msg=exc.args, data=None).dict()
 	)
+
+
+async def response_wrapper_middleware(request: Request, call_next):
+	response = await call_next(request)
+	if response.status_code == 200 and response.media_type == "application/json":
+		original_content = await response.json()
+		wrapped_content = ResponseModel(code=200, msg="Success", data=original_content).dict()
+		return JSONResponse(content=wrapped_content, status_code=200)
+	return response
 
 
 def init_middleware(app: FastAPI) -> None:
 	app.middleware('http')(db_session_middleware)
+	app.middleware('http')(response_wrapper_middleware)  # 添加封装返回结果的中间件
 	app.add_middleware(
 		CORSMiddleware,
 		allow_origins=origins,

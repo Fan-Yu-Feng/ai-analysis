@@ -11,13 +11,13 @@ from ai_analytics.sql_app.vo.schemas import BaseRespVO
 
 
 class BaseTaskConfig(BaseRespVO):
+	# id: int
 	prompt_config_id: int
 	status: str
 	task_type: str
 	priority: int
 	config_detail: str
 	error_message: str
-	pass
 
 
 class TaskConfigCreateSchema(BaseTaskConfig):
@@ -32,7 +32,7 @@ class TaskConfigUpdateSchema(BaseTaskConfig):
 	"""
 	请求模型验证：
 	"""
-	pass
+	id: int
 
 
 class TaskConfigSchema(BaseTaskConfig):

@@ -16,7 +16,8 @@ class BaseRespVO(BaseModel):
 	# create_by: int
 	# update_by: int
 	# deleted: int
-	pass
+	class Config:
+		orm_mode = True
 
 class SocialMediaCommentList(BaseModel):
 	platform: str

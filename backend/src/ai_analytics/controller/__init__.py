@@ -8,9 +8,10 @@
 """
 
 from pydantic import BaseModel
-from typing import Any, Optional
+from typing import Any, Optional, List, Union, TypeVar, Generic
+
 
 class ResponseModel(BaseModel):
     code: int
     msg: str
-    data: Optional[Any] = None
+    data: Any
