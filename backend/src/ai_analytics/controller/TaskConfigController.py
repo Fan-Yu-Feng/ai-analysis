@@ -50,3 +50,9 @@ def delete(pk: int, session: Session = Depends(get_db)):
 	data = _service.delete(session,pk)
 	return ResponseModel(code=200, msg="Success", data=True)
 
+
+@router.post('/task-config/start-task/{pk}', response_model=ResponseModel)
+def delete(pk: int, session: Session = Depends(get_db)):
+	data = _service.start_task(session,pk)
+	return ResponseModel(code=200, msg="Success", data=True)
+

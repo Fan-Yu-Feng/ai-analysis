@@ -11,18 +11,18 @@ class BaseEnum(Enum):
 		self.msg = msg
 
 	@classmethod
-	def list_all(cls):
+	def list_all(cls) -> list[dict]:
 		return [{'code': item.code, 'msg': item.msg} for item in cls]
 
 	@classmethod
-	def get_by_code(cls, code: str):
+	def get_by_code(cls, code: str) -> 'BaseEnum':
 		for item in cls:
 			if item.code == code:
 				return item
 		return None
 
 	@classmethod
-	def get_by_msg(cls, msg: str):
+	def get_by_msg(cls, msg: str) -> 'BaseEnum':
 		for item in cls:
 			if item.msg == msg:
 				return item
