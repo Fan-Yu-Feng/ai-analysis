@@ -6,19 +6,20 @@
 @Author  ：yohong
 @Date    ：2025/1/10 14:29 
 """
+from typing import Optional
 
 from ai_analytics.sql_app.vo.schemas import BaseRespVO
 
 
 class BaseTaskConfig(BaseRespVO):
 	# id: int
-	prompt_config_id: int
-	status: str
-	task_type: str
-	priority: int
-	config_detail: str
-	error_message: str
-
+	# prompt_config_id: Optional[int]
+	# status: str
+	# task_type: Optional[str]
+	# priority: Optional[int]
+	# config_detail: Optional[str]
+	# error_message: Optional[str]
+	pass
 
 class TaskConfigCreateSchema(BaseTaskConfig):
 	"""
@@ -33,6 +34,7 @@ class TaskConfigUpdateSchema(BaseTaskConfig):
 	请求模型验证：
 	"""
 	id: int
+	status: str
 
 
 class TaskConfigSchema(BaseTaskConfig):

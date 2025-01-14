@@ -12,7 +12,7 @@ import unittest
 from unittest.mock import patch
 from ai_analytics.service.CommentAnalysisTask import CommentAnalysisTask
 from ai_analytics.service.TaskFactory import TaskFactory
-from ai_analytics.sql_app.dataobject import TaskConfigDO
+from ai_analytics.sql_app.dataobject.TaskConfigDO import TaskConfigDO
 from ai_analytics.common.enums import TaskStatusEnum, TaskTypeEnum
 
 

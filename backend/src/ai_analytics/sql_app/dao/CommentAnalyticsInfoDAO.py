@@ -1,4 +1,7 @@
 from typing import List
+
+from sqlmodel import Session
+
 from ai_analytics.sql_app.dao.BaseDAO import BaseDAO
 from ai_analytics.sql_app.dataobject.CommentAnalyticsInfoDO import CommentAnalyticsInfoDO
 from ai_analytics.sql_app.vo.CommentAnalyticsInfoVO import CommentAnalyticsInfoCreate
@@ -13,7 +16,7 @@ class CommentAnalyticsInfoDAO(BaseDAO):
 		self.session.add(do)
 		self.session.flush()
 
-	def add_all(self, do_list: List[CommentAnalyticsInfoCreate]):
+	def add_all(self, session: Session, do_list: List[CommentAnalyticsInfoCreate]):
 		""" 添加新记录 """
 		do_objects = [
 			CommentAnalyticsInfoDO(

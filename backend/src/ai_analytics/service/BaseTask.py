@@ -10,10 +10,11 @@ import threading
 import queue
 from concurrent.futures import ThreadPoolExecutor
 from abc import ABC, abstractmethod
+from ai_analytics.sql_app.vo.TaskConfigVO import (TaskConfigSchema, TaskConfigCreateSchema, TaskConfigUpdateSchema)
 
 from ai_analytics.common.enums import TaskTypeEnum
 from ai_analytics.sql_app.dao.PromptConfigDAO import PromptConfigDAO
-from ai_analytics.sql_app.dao import TaskConfigDAO
+from ai_analytics.sql_app.dao.TaskConfigDAO import TaskConfigDAO
 from ai_analytics.sql_app.dataobject import TaskConfigDO
 
 
@@ -26,8 +27,8 @@ class BaseTask(ABC):
     同时要保证优先级高的先执行
     执行任务时定义一个线程池，从线程池中去取线程执行任务
     """
-	_task_config_dao = TaskConfigDAO.getInstance()
-	_prompt_config_dao = PromptConfigDAO.getInstance()
+	_task_config_dao = TaskConfigDAO()
+	_prompt_config_dao = PromptConfigDAO()
 
 	def __init__(self, max_workers=5):
 		"""
@@ -38,18 +39,20 @@ class BaseTask(ABC):
 		self.processed_tasks = set()
 		self.executor = ThreadPoolExecutor(max_workers=max_workers)
 		self.lock = threading.Lock()
+		self.session = self._task_config_dao.session
 
 	def update_task_status(self, task_id, source_status, target_status, msg: str = None):
+
 		"""
 		更新任务状态  target_status -> source_status
 		:param target_status: 更新目标状态
 		:param source_status:  数据原本的状态
 		:param task_id: 任务id
 		"""
-		update_do = TaskConfigDO(status=target_status)
+		update_do = TaskConfigUpdateSchema(id=task_id, status=target_status)
 		if msg:
 			update_do.error_message = msg
-		return self._task_config_dao.update_by_filters(update_do, id=task_id, status=source_status)
+		return self._task_config_dao.update_by_filters(self.session,update_do, id=task_id, status=source_status)
 
 	@abstractmethod
 	def _get_wait_tasks(self):

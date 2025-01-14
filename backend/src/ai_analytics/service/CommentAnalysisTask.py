@@ -13,7 +13,7 @@ from ai_analytics.core.agents.comment_analysis import GeneralAnalysisInfoExtract
 from ai_analytics.service.BaseTask import BaseTask
 from ai_analytics.sql_app.dao.CommentAnalyticsInfoDAO import CommentAnalyticsInfoDAO
 from ai_analytics.sql_app.dao.SocialMediaCommentListDAO import SocialMediaCommentListDAO
-from ai_analytics.sql_app.dataobject import TaskConfigDO
+from ai_analytics.sql_app.dataobject.TaskConfigDO import TaskConfigDO
 from ai_analytics.sql_app.vo.CommentAnalyticsInfoVO import CommentAnalyticsInfoCreate
 from ai_analytics.common.log import logger
 
@@ -29,8 +29,8 @@ class CommentAnalysisTask(BaseTask):
 		"""
 		# Fetch tasks from the source and add to the queue
 		# Example: self.task_queue.put((priority, task))
-		return self._task_config_dao.get_by_filters_do(
-			TaskConfigDO(status=TaskStatusEnum.WAIT, task_type=self.get_task_type()))
+		return self._task_config_dao.get_by_filters_do(self.session, TaskConfigDO(status=TaskStatusEnum.WAIT,
+		                                                                          task_type=self.get_task_type()))
 
 	def get_task_type(self) -> TaskTypeEnum:
 		return TaskTypeEnum.AnalysisComment
@@ -71,11 +71,11 @@ class CommentAnalysisTask(BaseTask):
 	async def run(self, task: TaskConfigDO):
 		# Run the comment analysis task
 		# 获取任务的 prompt
-		prompt_do = self._prompt_config_dao.get_by_id(task.prompt_config_id)
+		prompt_do = self._prompt_config_dao.get_by_id(self.session,task.prompt_config_id)
 		# 获取评论数据
 		socialCommentListDao = SocialMediaCommentListDAO.getInstance()
-		startId = 1822240937
-		social_comment_list = socialCommentListDao.get_page_by_start_id(1, 20, startId)
+		startId = 0
+		social_comment_list = socialCommentListDao.get_page_by_start_id(self.session, 1, 20, startId)
 		gie = GeneralAnalysisInfoExtractor(prompt_do.system_prompt, prompt_do.user_prompt)
 		while len(social_comment_list) > 0:
 			startId = social_comment_list[-1].id
@@ -104,15 +104,15 @@ class CommentAnalysisTask(BaseTask):
 					comment_analytics_info_list.append(comment_analytics_info)
 				except Exception as e:
 					logger.info(f"Error PROGRESS comment_id {comment_id}: {e}")
-			comment_analytics_info = CommentAnalyticsInfoDAO.getInstance()
-			comment_analytics_info.add_all(comment_analytics_info_list)
+			comment_analytics_dao = CommentAnalyticsInfoDAO.getInstance()
+			comment_analytics_dao.add_all(self.session, comment_analytics_info_list)
 
-			social_comment_list = socialCommentListDao.get_page_by_start_id(1, 10, startId)
+			social_comment_list = socialCommentListDao.get_page_by_start_id(self.session, 1, 10, startId)
 
 
 # Insert the data into the database
 if __name__ == '__main__':
 	task = CommentAnalysisTask()
-	task.start_fetching()
-
+	task.start_fetching(1000 * 60 * 5)
+	TaskConfigDO()
 	asyncio.run(task.run())
