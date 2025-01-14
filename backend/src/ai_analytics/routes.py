@@ -8,11 +8,13 @@
 """
 from fastapi import APIRouter, FastAPI
 from ai_analytics.controller.TaskConfigController import router as TaskConfigRouter
+from ai_analytics.controller.EnumController import router as EnumRouter
 
 
 def router_v1():
     router = APIRouter()
     router.include_router(TaskConfigRouter, tags=['taskConfig'])
+    router.include_router(EnumRouter, tags=['enums'])
     return router
 
 

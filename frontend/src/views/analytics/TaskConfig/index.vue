@@ -6,14 +6,14 @@
       class="-mb-15px"
       :model="queryParams"
       :inline="true"
-      label-width="68px"
+      label-width="70px"
     >
-      <el-form-item label="id" prop="promptConfigId">
+      <el-form-item label="prompt配置" prop="promptConfigId">
         <el-input
           v-model="queryParams.promptConfigId"
-          placeholder="请输入评论配置表 id"
+          placeholder="请输入评论配置表 ID"
           clearable
-          class="!w-240px"
+          class="!w-250px"
           @keyup.enter="handleQuery"
         />
       </el-form-item>
@@ -24,18 +24,15 @@
           clearable
           class="!w-240px"
         >
-          <el-option label="请选择字典生成" value="" />
+          <el-option
+            v-for="item in taskStatusList"
+            :key="item.code"
+            :label="item.msg"
+            :value="item.code"
+          />
         </el-select>
       </el-form-item>
-      <el-form-item label="配置明细" prop="configDetail">
-        <el-input
-          v-model="queryParams.configDetail"
-          placeholder="请输入配置明细"
-          clearable
-          class="!w-240px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item label="任务类型" prop="taskType">
         <el-select
           v-model="queryParams.taskType"
@@ -43,18 +40,18 @@
           clearable
           class="!w-240px"
         >
-          <el-option label="请选择字典生成" value="" />
+          <el-option
+            v-for="item in taskTypeList"
+            :key="item.code"
+            :label="item.msg"
+            :value="item.code"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
         <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
-        <el-button
-          v-hasPermi="['task:config:create']"
-          type="primary"
-          plain
-          @click="openForm('create')"
-        >
+        <el-button type="primary" plain @click="openForm('create')">
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
       </el-form-item>
@@ -64,7 +61,7 @@
   <!-- 列表 -->
   <ContentWrap>
     <el-table v-loading="loading" :data="list" :stripe="true" :show-overflow-tooltip="true">
-      <el-table-column label="id" align="center" prop="promptConfigId" />
+      <el-table-column label="ID" align="center" prop="promptConfigId" />
       <el-table-column label="任务状态" align="center" prop="status" />
       <el-table-column label="优先级" align="center" prop="priority" />
       <el-table-column label="配置明细" align="center" prop="configDetail" />
@@ -81,22 +78,10 @@
       <el-table-column label="任务类型" align="center" prop="taskType" />
       <el-table-column label="操作" align="center">
         <template #default="scope">
-          <el-button
-            v-hasPermi="['task:config:update']"
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-          >
+          <el-button link type="primary" @click="openForm('update', scope.row.id)">
             编辑
           </el-button>
-          <el-button
-            v-hasPermi="['task:config:delete']"
-            link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-          >
-            删除
-          </el-button>
+          <el-button link type="danger" @click="handleDelete(scope.row.id)"> 删除 </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -115,9 +100,9 @@
 
 <script setup lang="ts">
 import { dateFormatter } from '@/utils/formatTime'
-import download from '@/utils/download'
-import { ConfigVO, TaskConfigApi } from '@/api/taskConfig'
+import { TaskConfigVO, TaskConfigApi, TaskConfigReqParams } from '@/api/taskConfig'
 import ConfigForm from './ConfigForm.vue'
+import { EnumItem, EnumName, EnumsApi } from '@/api/enums'
 
 /** 任务配置 列表 */
 defineOptions({ name: 'Config' })
@@ -126,9 +111,9 @@ const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 
 const loading = ref(true) // 列表的加载中
-const list = ref<ConfigVO[]>([]) // 列表的数据
+const list = ref<TaskConfigVO[]>([]) // 列表的数据
 const total = ref(0) // 列表的总页数
-const queryParams = reactive({
+const queryParams = reactive<TaskConfigReqParams>({
   pageNo: 1,
   pageSize: 10,
   promptConfigId: undefined,
@@ -136,21 +121,26 @@ const queryParams = reactive({
   priority: undefined,
   configDetail: undefined,
   errorMessage: undefined,
-  createBy: undefined,
-  updateBy: undefined,
-  createTime: [],
+  createBy: undefined, // 创建者
+  updateBy: undefined, // 修改者
   taskType: undefined,
 })
 const queryFormRef = ref() // 搜索的表单
-const exportLoading = ref(false) // 导出的加载中
-
+const taskStatusList = ref<EnumItem[]>([])
+const taskTypeList = ref<EnumItem[]>([])
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await TaskConfigApi.getTypeTaskPage({})
-    list.value = data.list
-    total.value = data.total
+    debugger
+    const data = await TaskConfigApi.getTypeTaskPage(queryParams)
+    // TODO 分页接口还没写，后面在补充
+    taskStatusList.value = await EnumsApi.getTaskStatusEnum()
+    taskTypeList.value = await EnumsApi.getTaskTypeEnum()
+    console.log('taskStatusList', taskStatusList.value)
+    list.value = data.data
+    // list.value = data.list
+    // total.value = data.total
   } finally {
     loading.value = false
   }

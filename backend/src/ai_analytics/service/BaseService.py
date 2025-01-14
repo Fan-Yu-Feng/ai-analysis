@@ -20,6 +20,7 @@ class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
 
 	def get_by_page(self, session: Session = None, page_no=1, page_size=10, ) -> List[ModelType]:
 		""""""
+		# TODO 分页接口还没写，后面在补充，list && total
 		return self.dao.get_page_by_start_id(session,page_no, page_size)
 
 	def total(self, session: Session, reqVo: CreateSchema) -> int:
