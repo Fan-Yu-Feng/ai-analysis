@@ -102,7 +102,7 @@ def insert_db(res: dict):
             'liked_count'],
         collected_count=res['data'][0]['note_list'][0]['collected_count'] if 'note_list' in res['data'][0] else
         res['data'][0]['collected_count'],
-        create_by_=1,  # Assuming a valid user ID
+        creator_=1,  # Assuming a valid user ID
         create_time_=datetime.now(),
         update_by_=None,
         update_time_=None,

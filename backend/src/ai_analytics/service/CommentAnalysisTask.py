@@ -107,7 +107,7 @@ class CommentAnalysisTask(BaseTask):
 			comment_analytics_dao = CommentAnalyticsInfoDAO.getInstance()
 			comment_analytics_dao.add_all(self.session, comment_analytics_info_list)
 
-			social_comment_list = socialCommentListDao.get_page_by_start_id(self.session, 1, 10, startId)
+			social_comment_list = socialCommentListDao.get_page_by_start_id(self.session, 1, 20, startId)
 
 
 # Insert the data into the database

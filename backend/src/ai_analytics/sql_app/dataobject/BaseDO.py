@@ -59,8 +59,8 @@ class BaseObj(Base):
 	create_time = Column(DateTime, default=datetime.utcnow, nullable=False, comment='创建时间')
 	update_time = Column(DateTime, default=datetime.utcnow, nullable=False, onupdate=datetime.utcnow, comment='更新时间')
 	deleted = Column(Integer, default=0, nullable=False, comment='是否删除，0未删除，1已删除')
-	create_by = Column(String(255), nullable=True, default='sys', comment='创建者')
-	update_by = Column(String(255), nullable=True, default='sys', comment='修改者')
+	creator = Column(String(255), nullable=True, default='sys', comment='创建者')
+	updater = Column(String(255), nullable=True, default='sys', comment='修改者')
 	pass
 
 

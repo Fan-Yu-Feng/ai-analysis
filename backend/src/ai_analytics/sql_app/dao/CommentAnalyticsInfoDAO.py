@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlmodel import Session
+from sqlalchemy.orm import Session
 
 from ai_analytics.sql_app.dao.BaseDAO import BaseDAO
 from ai_analytics.sql_app.dataobject.CommentAnalyticsInfoDO import CommentAnalyticsInfoDO

@@ -13,8 +13,8 @@ class BaseRespVO(BaseModel):
 	# id: int
 	# create_time: datetime
 	# update_time: datetime
-	# create_by: int
-	# update_by: int
+	# creator: int
+	# updater: int
 	# deleted: int
 	class Config:
 		orm_mode = True
@@ -31,9 +31,9 @@ class SocialMediaCommentList(BaseModel):
 	comment_user_nickname: str
 	comment_time: str
 	deleted: int
-	create_by: int
+	creator: int
 	create_time: str
-	update_by: int
+	updater: int
 	update_time: str
 	update_time: Optional[str]  # Allow None and expect string
 	comment_json_extra: Optional[str]  # Allow None and expect string
@@ -97,9 +97,9 @@ class SocialMediaContentInfoBase(BaseModel):
 	pub_time: Optional[datetime]
 	pub_update_time: Optional[datetime]
 	deleted: Optional[int] = 0
-	create_by: int
+	creator: int
 	create_time: datetime
-	update_by: Optional[int]
+	updater: Optional[int]
 	update_time: Optional[datetime]
 	ext_info: Optional[str]
 

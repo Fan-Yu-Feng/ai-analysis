@@ -5,11 +5,11 @@ LOG_LEVEL: DEBUG
 # mysql+pymysql://root:oneapimmysql@192.168.15.8:3306/ai_comment"
 DATABASE:
   DRIVER: mysql+pymysql
-  NAME: ai_comment
-  HOST: 192.168.15.8
+  NAME: xguide_analytics
+  HOST: 192.168.30.205
   PORT: 3306
-  USERNAME: root
-  PASSWORD: oneapimmysql
+  USERNAME: dradmin
+  PASSWORD: Dr@13520
   QUERY:
     charset: utf8mb4
 
@@ -17,8 +17,6 @@ LLM:
     MODEL: qwen2.5:14b
     OPEN_AI_API_KEY: sk-dmzReHcJzXoP9b6J6f042d36E9A14c72B8F4Ce1139DcC431
     OPEN_AI_API_BASE: http://192.168.15.8:3001/v1
-
-
 
 HOST: 127.0.0.1
 PORT: 8000
