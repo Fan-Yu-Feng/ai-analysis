@@ -95,7 +95,6 @@ class CommentAnalysisTask(BaseTask):
 				try:
 					comment_analytics_info = CommentAnalyticsInfoCreate(
 						comment_id=int(comment_id),
-						content=info['comment'],
 						sentiment=info['sentiment'],
 						topic=info.get('topic'),
 						keywords=info['keywords'] if isinstance(info['keywords'], list) else [info['keywords']],

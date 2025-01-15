@@ -4,7 +4,6 @@ from datetime import datetime
 
 class CommentAnalyticsInfoBase(BaseModel):
     comment_id: int
-    content: str
     sentiment: str
     topic: Optional[str] = None
     keywords: Optional[List[str]] = None
